@@ -1,3 +1,4 @@
+"use strict";
 
 let player1 = 1;
 let player2 = 2;
