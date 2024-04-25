@@ -1,27 +1,84 @@
-html,
-body {
-    margin: 0;
-    padding: 0;
-    background: #333;
-    color: rgb(230, 230, 230);
+body,
+html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #242424;
+	overflow: hidden;
 }
 
-header {
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    background: darkslategray;
+.container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-decoration: none;
 }
 
-main {
-    text-align: center;
+.panel {
+	position: relative;
+	width: 250px;
+	height: 250px;
+	/* TODO: get the text to not be skewed */
+	color: white;
+	text-align: center;
+	align-content: center;
+	transition: transform 0.5s ease, background-color 0.5s ease;
+	animation: fadeIn 7s forwards;
+	/* TODO: add javascript instead of this fadeIn to prevent being able to see the intro animation */
 }
 
-footer {
-    text-align: center;
-    bottom: 0;
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background: darkslategray;
+.panel:hover {
+	background-color: #84b28f;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.panel1 {
+	background-color: #666635;
+	width: 225px;
+	height: 200px;
+	right: -135px;
+	top: 15px;
+	transform: rotate(20deg) skew(20deg, 25deg);
+}
+
+.panel1:hover {
+	transform: rotate(20deg) skew(20deg, 25deg) translate(-10px, 10px);
+}
+
+.panel2 {
+	background-color: #35665B;
+	transform: rotate(45deg);
+	top: -200px;
+}
+
+.panel2:hover {
+	transform: rotate(45deg) translate(-10px, -10px);
+}
+
+.panel3 {
+	background-color: #663D3D;
+	width: 225px;
+	height: 200px;
+	right: 135px;
+	top: 15px;
+	transform: rotate(-20deg) skew(-20deg, -25deg);
+}
+
+.panel3:hover {
+	transform: rotate(-20deg) skew(-20deg, -25deg) translate(10px, 10px);
 }
