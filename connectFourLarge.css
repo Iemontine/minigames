@@ -1,9 +1,34 @@
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #333;
+    color: rgb(230, 230, 230);
+}
+
+header {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background: darkslategray;
+}
+
 main {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
+footer {
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background: darkslategray;
+
+}
 #board {
   height: 600px;
   width: 700px;
@@ -37,4 +62,13 @@ main {
 
 .yellowPiece {
   background-color:rgb(194, 149, 0);
+}
+
+#messageTab {
+  height: 100%;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
