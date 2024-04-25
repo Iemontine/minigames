@@ -12,6 +12,7 @@ html {
 .game-container {
 	display: flex;
 	flex-direction: column;
+	width: 350px;
 	align-items: center;
 }
 
@@ -41,25 +42,28 @@ html {
 }
 
 .mole {
-	cursor: pointer;
-	width: 50px;
+	width: 100px;
 	transition: transform 0.3s ease;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+	-webkit-user-drag: none;
+	-khtml-user-drag: none;
+	-moz-user-drag: none;
+	-o-user-drag: none;
 }
 
 .start-button {
+	position:absolute;
+	top: 70%;
 	background-color: yellow;
 	border: none;
 	border-radius: 20px;
 	padding: 10px 20px;
 	font-size: 20px;
-	margin-top: 20px;
 	cursor: pointer;
-}
 
-.start-button:active {
-	transform: scale(0.98);
-}
-
-.start-button:focus {
-	outline: none;
+	transition: transform 0.5s ease, opacity 0.5s ease;
 }
