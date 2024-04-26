@@ -35,24 +35,11 @@ html {
 	display:inline-block; 
 	width: 250px;
 	height: 250px;
-	/* TODO: get the text to not be skewed */
 	color: white;
 	text-align: center;
 	align-content: center;
-	transition: transform 0.5s ease, background-color 0.5s ease;
-	animation: fadeIn 7s forwards;
-	/* TODO: add javascript instead of this fadeIn to prevent being able to see the intro transition */
+	transition: skew 0.5s ease, transform 0.5s ease, background-color 0.5s ease;
 	text-decoration: none;
-}
-
-@keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
 }
 
 .panel1 {
@@ -104,13 +91,8 @@ html {
 	margin: 0 auto;
 	position: relative;
 	top: 0%;
-
-	font-weight: normal;
-
 	font-size:30px;
-	
 	font-family: 'tron';
-	color:white;
 }
 .panel1 .panel-text {
 	transform: skew(-20deg, -25deg) rotate(-20deg);
