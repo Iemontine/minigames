@@ -34,6 +34,7 @@ function setGame() {
     }
     board.push(row);
   }
+  setMessage();
 }
 
 // resets game board
@@ -78,15 +79,16 @@ function placePiece(e) {
   let id = row + '-' + col;
   let space = document.getElementById(id);
 
-	space.classList.add(currentPlayer == 1 ? "redPiece" : "yellowPiece");   
+	space.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");   
 
 
   checkForWin(row, col);
   if (gameOver) {
     endGame();
+    return;
   }
   currentPlayer = currentPlayer % 2 + 1;  // Set current player to other player
-
+  setMessage();
 }
 
 // Removes all children in a div
@@ -102,18 +104,36 @@ function endGame() {
 }
 
 function promptForGame() {
-  let winnerMessage = "Player " + currentPlayer + " Wins!"; 
+  let winnerMessage = "player " + currentPlayer + " wins !"; 
   let messageTab = document.getElementById("messageTab");
+  clearDiv(messageTab);
   addMessage(winnerMessage, messageTab);
-  addMessage("Want to play again?", messageTab);
-  let playAgainButton = addButton("Play Again", messageTab, ["button"]);
+  addMessage("want to play again ?", messageTab);
+  let buttonContainer = addDiv(messageTab, ["buttonContainer"]);
+  let playAgainButton = addButton("play again", buttonContainer, ["button"]);
   playAgainButton.addEventListener("click", resetGame);
-  let quitButton = addButton("Quit", messageTab, ["button"])
+  let quitButton = addButton("quit", buttonContainer, ["button"])
   quitButton.addEventListener("click", quitGame);
+}
+
+function setMessage() {
+  let messageContainer = document.getElementById("messageTab");
+  clearDiv(messageContainer);
+  let message = "player " + currentPlayer + "'s turn";
+  addMessage(message, messageTab);
 }
 
 function quitGame() {
   window.location.href = "index.html";
+}
+
+function addDiv(container, classes) {
+  let div = document.createElement("div");
+  classes.forEach(c => {
+    div.classList.add(c);
+  })
+  container.appendChild(div);
+  return div;
 }
 
 /* 
@@ -279,7 +299,7 @@ function hoverCol(e) {
 	if (row > -1) {
 		let possiblePiecePlaceId = row + '-' + col;
 		let possiblePiecePlace = document.getElementById(possiblePiecePlaceId);
-		possiblePiecePlace.classList.add(currentPlayer == 1 ? "redPiece" : "yellowPiece");
+		possiblePiecePlace.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");
 	}
 
 }
@@ -300,7 +320,7 @@ function unHoverCol(e) {
 	if (row > -1) {
 		let possiblePiecePlaceId = row + '-' + col;
 		let possiblePiecePlace = document.getElementById(possiblePiecePlaceId);
-		possiblePiecePlace.classList.remove(currentPlayer == 1 ? "redPiece" : "yellowPiece");
+		possiblePiecePlace.classList.remove(currentPlayer == 1 ? "bluePiece" : "yellowPiece");
 	}
 
 }
