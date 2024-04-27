@@ -9,7 +9,10 @@ let rows = 6;
 let cols = 7;
 let colHeight = new Array(7).fill(5);
 let gameOver = false;
-
+let title = document.getElementById("title");
+title.addEventListener("click", () => {
+  window.location.href = "index.html";
+})
 
 window.onload = () => {
 	setGame();
@@ -34,6 +37,7 @@ function setGame() {
     }
     board.push(row);
   }
+  setMessage();
 }
 
 // resets game board
@@ -57,6 +61,7 @@ function resetGame() {
   }
   let messageContainer = document.getElementById("messageTab");
   clearDiv(messageContainer);
+  setMessage();
 }
 
 /* 
@@ -78,15 +83,16 @@ function placePiece(e) {
   let id = row + '-' + col;
   let space = document.getElementById(id);
 
-	space.classList.add(currentPlayer == 1 ? "redPiece" : "yellowPiece");   
+	space.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");   
 
 
   checkForWin(row, col);
   if (gameOver) {
     endGame();
+    return;
   }
   currentPlayer = currentPlayer % 2 + 1;  // Set current player to other player
-
+  setMessage();
 }
 
 // Removes all children in a div
@@ -101,19 +107,43 @@ function endGame() {
   promptForGame();
 }
 
+/*
+  Displays end game message and promps if players want
+  to play again
+*/
 function promptForGame() {
-  let winnerMessage = "Player " + currentPlayer + " Wins!"; 
+  let winnerMessage = "player " + currentPlayer + " wins !"; 
   let messageTab = document.getElementById("messageTab");
+  clearDiv(messageTab);
   addMessage(winnerMessage, messageTab);
-  addMessage("Want to play again?", messageTab);
-  let playAgainButton = addButton("Play Again", messageTab, ["button"]);
+  let buttonContainer = addDiv(messageTab, ["buttonContainer"]);
+  let playAgainButton = addButton("play again", buttonContainer, ["button"]);
   playAgainButton.addEventListener("click", resetGame);
-  let quitButton = addButton("Quit", messageTab, ["button"])
+  let quitButton = addButton("quit", buttonContainer, ["button"])
   quitButton.addEventListener("click", quitGame);
 }
 
+// Sets message to tell whos currently playing
+function setMessage() {
+  let messageContainer = document.getElementById("messageTab");
+  clearDiv(messageContainer);
+  let message = "player " + currentPlayer + "'s turn";
+  addMessage(message, messageTab);
+}
+
+// navigate to home page
 function quitGame() {
   window.location.href = "index.html";
+}
+
+// adds a div into a container with the given classes
+function addDiv(container, classes) {
+  let div = document.createElement("div");
+  classes.forEach(c => {
+    div.classList.add(c);
+  })
+  container.appendChild(div);
+  return div;
 }
 
 /* 
@@ -154,23 +184,18 @@ function removeInteractivity() {
   }
 }
 
-
-
 function checkForWin(row, col) {
 	checkHorizontal(row);
 	checkVertical(col);
 	checkDiagonal(row, col);
 }
 
-
 function checkDiagonal(row, col) {
-  
   let [leftDiagStartRow, leftDiagStartCol] = getLeftDiagStart(row,col);
   let [rightDiagStartRow, rightDiagStartCol] = getRightDiagStart(row,col);
   checkLeftDiag(leftDiagStartRow, leftDiagStartCol);
   checkRightDiag(rightDiagStartRow, rightDiagStartCol);
 }
-
 
 function checkLeftDiag(row, col) {
 	let consecutive = 0;
@@ -187,7 +212,6 @@ function checkLeftDiag(row, col) {
 		col++;
 	}
 }
-
 
 function checkRightDiag(row, col) {
 	let consecutive = 0;
@@ -206,11 +230,9 @@ function checkRightDiag(row, col) {
 	}
 }
 
-
 function getLeftDiagStart(row, col) {
 	return row <= col ? [0,col-row] : [row-col,0];
 }
-
 
 function getRightDiagStart(row, col) {
 	while (row < 5 && col > 0) {
@@ -219,7 +241,6 @@ function getRightDiagStart(row, col) {
 	}
 	return [row,col];
 }
-
 
 function checkVertical(col) {
 	let consecutive = 0;
@@ -236,7 +257,6 @@ function checkVertical(col) {
 	}
 }
 
-
 function checkHorizontal(row) {  
 	let consecutive = 0;
 	for (let col = 0; col < cols; col++) {
@@ -252,10 +272,12 @@ function checkHorizontal(row) {
 	}
 }
 
-
+// Checks if colun is full
 function colFull(col) {
 	return colHeight[col] < 0;
 }
+
+// gets the coords of a piece placement
 function getCoords(e) {
 	let coord = e.target.id.split('-');
 	let row = parseInt(coord[0]);
@@ -279,7 +301,7 @@ function hoverCol(e) {
 	if (row > -1) {
 		let possiblePiecePlaceId = row + '-' + col;
 		let possiblePiecePlace = document.getElementById(possiblePiecePlaceId);
-		possiblePiecePlace.classList.add(currentPlayer == 1 ? "redPiece" : "yellowPiece");
+		possiblePiecePlace.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");
 	}
 
 }
@@ -300,10 +322,12 @@ function unHoverCol(e) {
 	if (row > -1) {
 		let possiblePiecePlaceId = row + '-' + col;
 		let possiblePiecePlace = document.getElementById(possiblePiecePlaceId);
-		possiblePiecePlace.classList.remove(currentPlayer == 1 ? "redPiece" : "yellowPiece");
+		possiblePiecePlace.classList.remove(currentPlayer == 1 ? "bluePiece" : "yellowPiece");
 	}
 
 }
+
+// gets all the elements in a column
 function getCol(col) {
 	let column = [];
 	for (let r = 0; r < rows; r++) {
