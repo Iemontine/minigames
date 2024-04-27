@@ -1,10 +1,13 @@
 "use strict";
 
+
 document.addEventListener('DOMContentLoaded', function () {
 	const startButton = document.getElementById('startButton');
 	const moles = document.querySelectorAll('.mole');
 	const scoreDisplay = document.getElementById('score');
 	const timeLeftDisplay = document.getElementById('timeLeft');
+	
+
 	let gameRunning = false;
 	let gameTimer;
 	let score = 0;
