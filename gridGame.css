@@ -1,0 +1,65 @@
+* { /* Global variables */
+  --size: calc(60px); /* TODO: * 5vh */
+  --dimension:12;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+#gameGrid {
+    display: grid;
+    grid-template-rows: repeat(var(--dimension), var(--size));
+    grid-template-columns: repeat(var(--dimension), var(--size));
+    gap: 0px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.control-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+}
+
+.cell {
+    width: var(--size);
+    height: var(--size);
+    background-color: lightgrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player {
+    position: relative;
+    background-size: 200%;
+}
+
+.sprite {
+    content: '';
+    position: absolute;
+    width: 150px; height: 150px;
+    background: url('gridGame/8.png') no-repeat center center;
+    background-size: contain;
+}
+    
+.block {
+    background-color: green;
+}
+
+.hidden {
+    background-color: white;
+}
