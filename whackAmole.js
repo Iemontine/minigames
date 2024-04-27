@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			const mole = randomMole(moles);
 			if (mole.getAttribute("src") == "image1.png") {
 				mole.src = 'image2.png'; // Mole pops out
+
 				mole.dataset.hit = true;
 			}
 			setTimeout(() => {
@@ -72,7 +73,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		resetGame();
 		startButton.style.opacity = 0;
 		startButton.style.transform = "scale(0)";
-
 		gameTimer = setTimeout(peep, peepRate);
 
 		let countdownTimer = setInterval(() => {
@@ -101,13 +101,44 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (mole.dataset.hit) {
 				score += 10;
 				mole.src = 'image1.png'; // Change back immediately on hit
+				lightRingGreen(mole);
 				delete mole.dataset.hit;
 			} else {
 				score -= 5;
+				lightRingRed(mole);
 			}
+			setTimeout(() => {
+				resetLights(mole);
+			}, 750);
 			scoreDisplay.textContent = score;
 		});
 	});
-
 	startButton.addEventListener('click', startGame);
 });
+
+function lightRingGreen(mole) {
+	let moleHole = mole.closest(".mole-hole");
+	let frontRing = moleHole.children[0];
+	let backRing = moleHole.children[1];
+	frontRing.classList.add("greenRing");
+	backRing.classList.add("greenRing");
+}
+
+function lightRingRed(mole) {
+	let moleHole = mole.closest(".mole-hole");
+	let frontRing = moleHole.children[0];
+	let backRing = moleHole.children[1];
+	frontRing.classList.add("redRing");
+	backRing.classList.add("redRing");
+}
+
+function resetLights(mole) {
+		let moleHole = mole.closest(".mole-hole");
+		let frontRing = moleHole.children[0];
+		let backRing = moleHole.children[1];
+		console.log(frontRing);
+		frontRing.classList.remove("greenRing");
+		backRing.classList.remove("greenRing");
+		frontRing.classList.remove("redRing");
+		backRing.classList.remove("redRing");
+}
