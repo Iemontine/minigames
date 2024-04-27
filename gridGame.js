@@ -3,9 +3,10 @@
 let grid = document.getElementById("gameGrid");
 let gridSize = 11;
 let playerPosition = { x: 1, y: 1 };
-let blocks = [{ x: 3, y: 4 }, { x: 5, y: 5 }];
+let blocks = [{ x: 3, y: 3 }, { x: 5, y: 5 }];
 let solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
 let walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0']);
+let blockColors = {};
 
 const setupGame = () => {
 	for (let i = 0; i < gridSize * gridSize; i++) {
@@ -13,14 +14,28 @@ const setupGame = () => {
 		cell.classList.add('cell');
 		grid.appendChild(cell);
 	}
+
+	// Generate unique color for each block-cell pairing
+	blocks.forEach((block, index) => {
+		const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Generate a random HEX color value
+		blockColors[`${block.x},${block.y}`] = color; // Assign color to block
+		// Assign same color to corresponding solution cell
+		if (solutions[index]) {
+			blockColors[`${solutions[index].x},${solutions[index].y}`] = color; 
+		}
+	});
+
 	updateGame();
 };
 
 // Handle player movement
-const isInblock = (position) => {
+const inWall = (position) => {
 	return blocks.some((block) => position.x === block.x && position.y === block.y);
 }
-const isInbounds = (position) => {
+const inSolution = (position) => {
+	return solutions.some((solution) => position.x === solution.x && position.y === solution.y);
+}
+const inBounds = (position) => {
 	return position.x >= 0
 		&& position.x < gridSize
 		&& position.y >= 0
@@ -32,7 +47,7 @@ const movePlayer = (dx, dy) => {
 	if (isMoving) return;
 	let newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
 
-	if (isInbounds(newPosition)) {
+	if (inBounds(newPosition)) {
 		isMoving = true;
 
 		let cellSize = document.querySelector('.cell').offsetWidth;
@@ -45,16 +60,17 @@ const movePlayer = (dx, dy) => {
 			// Check if the player is moving into any block
 			if (newPosition.x === block.x && newPosition.y === block.y) {
 				let blockMoved = false;
-				let newBlockPosition = { x: block.x + dx, y: block.y + dy };
-
-				// Push the block until it hits the edge/wall, or another block
-				while (isInbounds(newBlockPosition) && !isInblock(newBlockPosition)) {
-					blockMoved = true;
-					block = newBlockPosition; // Update block position
+				let newBlockPosition = { x: block.x + dx, y: block.y + dy};
+				while (inBounds(newBlockPosition) && !inWall(newBlockPosition) && !inSolution(newBlockPosition)) {
 					newBlockPosition.x += dx;
 					newBlockPosition.y += dy;
-				}
-				blocks[index] = { x: newBlockPosition.x - dx, y: newBlockPosition.y - dy }
+					blockMoved = true;
+				} 
+				// Push the block until it hits the edge/wall, or another block
+				if (inSolution(newBlockPosition))
+					blocks[index] = { x: newBlockPosition.x, y: newBlockPosition.y };
+				else
+					blocks[index] = { x: newBlockPosition.x - dx, y: newBlockPosition.y - dy };
 				
 				// Freeze movement to allow for hitting animation to play
 				animatePlayerHit(blockMoved, () => {
@@ -135,13 +151,15 @@ const updateGame = () => {
 			cell.appendChild(spriteDiv); // Append sprite div into the cell
 		} else if (blocks.some(blockPos => blockPos.x === x && blockPos.y === y)) {
 			cell.classList.add('block');
+			cell.style.backgroundColor = blockColors[`${x},${y}`];
 		} else if (solutions.some(solutionPos => solutionPos.x === x && solutionPos.y === y)) {
 			cell.classList.add('solution');
+			cell.style.backgroundColor = blockColors[`${x},${y}`];
 		} else if (walls.has(`${x},${y}`)) {
 			cell.classList.add('wall');
 		}
-		checkVictory();
 	});
+	checkVictory();
 };
 const checkVictory = () => {
 	const allSolved = blocks.every((block, index) => {

@@ -52,14 +52,6 @@ body, html {
     background-size: cover;
 }
     
-.block {
-    background-color: green;
-}
-
 .wall {
     background-color: black;
-}
-
-.solution {
-    background-color: purple;
 }
