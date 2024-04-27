@@ -34,3 +34,9 @@ body {
 .text {
   font-size: 25px;
 }
+
+.buttonContainer {
+  width: 100%;
+
+  justify-content:space-between;
+}

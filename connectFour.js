@@ -9,7 +9,10 @@ let rows = 6;
 let cols = 7;
 let colHeight = new Array(7).fill(5);
 let gameOver = false;
-
+let title = document.getElementById("title");
+title.addEventListener("click", () => {
+  window.location.href = "index.html";
+})
 
 window.onload = () => {
 	setGame();
@@ -58,6 +61,7 @@ function resetGame() {
   }
   let messageContainer = document.getElementById("messageTab");
   clearDiv(messageContainer);
+  setMessage();
 }
 
 /* 
@@ -103,12 +107,15 @@ function endGame() {
   promptForGame();
 }
 
+/*
+  Displays end game message and promps if players want
+  to play again
+*/
 function promptForGame() {
   let winnerMessage = "player " + currentPlayer + " wins !"; 
   let messageTab = document.getElementById("messageTab");
   clearDiv(messageTab);
   addMessage(winnerMessage, messageTab);
-  addMessage("want to play again ?", messageTab);
   let buttonContainer = addDiv(messageTab, ["buttonContainer"]);
   let playAgainButton = addButton("play again", buttonContainer, ["button"]);
   playAgainButton.addEventListener("click", resetGame);
@@ -116,6 +123,7 @@ function promptForGame() {
   quitButton.addEventListener("click", quitGame);
 }
 
+// Sets message to tell whos currently playing
 function setMessage() {
   let messageContainer = document.getElementById("messageTab");
   clearDiv(messageContainer);
@@ -123,10 +131,12 @@ function setMessage() {
   addMessage(message, messageTab);
 }
 
+// navigate to home page
 function quitGame() {
   window.location.href = "index.html";
 }
 
+// adds a div into a container with the given classes
 function addDiv(container, classes) {
   let div = document.createElement("div");
   classes.forEach(c => {
@@ -174,23 +184,18 @@ function removeInteractivity() {
   }
 }
 
-
-
 function checkForWin(row, col) {
 	checkHorizontal(row);
 	checkVertical(col);
 	checkDiagonal(row, col);
 }
 
-
 function checkDiagonal(row, col) {
-  
   let [leftDiagStartRow, leftDiagStartCol] = getLeftDiagStart(row,col);
   let [rightDiagStartRow, rightDiagStartCol] = getRightDiagStart(row,col);
   checkLeftDiag(leftDiagStartRow, leftDiagStartCol);
   checkRightDiag(rightDiagStartRow, rightDiagStartCol);
 }
-
 
 function checkLeftDiag(row, col) {
 	let consecutive = 0;
@@ -207,7 +212,6 @@ function checkLeftDiag(row, col) {
 		col++;
 	}
 }
-
 
 function checkRightDiag(row, col) {
 	let consecutive = 0;
@@ -226,11 +230,9 @@ function checkRightDiag(row, col) {
 	}
 }
 
-
 function getLeftDiagStart(row, col) {
 	return row <= col ? [0,col-row] : [row-col,0];
 }
-
 
 function getRightDiagStart(row, col) {
 	while (row < 5 && col > 0) {
@@ -239,7 +241,6 @@ function getRightDiagStart(row, col) {
 	}
 	return [row,col];
 }
-
 
 function checkVertical(col) {
 	let consecutive = 0;
@@ -256,7 +257,6 @@ function checkVertical(col) {
 	}
 }
 
-
 function checkHorizontal(row) {  
 	let consecutive = 0;
 	for (let col = 0; col < cols; col++) {
@@ -272,10 +272,12 @@ function checkHorizontal(row) {
 	}
 }
 
-
+// Checks if colun is full
 function colFull(col) {
 	return colHeight[col] < 0;
 }
+
+// gets the coords of a piece placement
 function getCoords(e) {
 	let coord = e.target.id.split('-');
 	let row = parseInt(coord[0]);
@@ -324,6 +326,8 @@ function unHoverCol(e) {
 	}
 
 }
+
+// gets all the elements in a column
 function getCol(col) {
 	let column = [];
 	for (let r = 0; r < rows; r++) {

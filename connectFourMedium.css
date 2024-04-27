@@ -9,29 +9,29 @@ body {
 
 main {
   padding-left: 20px;
-  flex-direction: column;
+  gap: 40px;
 }
 
 #board {
-  height: 325px;
-  width: 418px;
-  min-width: 418px;
+  height: 430px;
+  width: 510px;
+  min-width: 510px;
   padding: 50px;
 }
 
 .space {
-  height: 45px;
-  width: 45px;
+  height: 57px;
+  width: 57px;
 }
 
 #messageTab {
   height: 100%;
-  width: 100%;
+  width: 200px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-inline: auto;
+  /* margin-inline: auto; */
 }
 
 .text {
@@ -39,5 +39,7 @@ main {
 }
 
 .buttonContainer {
-  gap: 15px;
+  width: 100%;
+  gap: 20px;
+
 }

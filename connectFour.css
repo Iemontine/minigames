@@ -23,11 +23,21 @@ header {
   font-family: 'tron';
   color: white;
   text-shadow: 0 0 10px rgb(133, 220, 255);
+  display: flex;
+  justify-content: center;
+
+}
+
+#title {
+  width: max-content;
+}
+
+#title:hover {
+  cursor: pointer;
 }
 
 main {
 display: flex;
-flex-direction: row;
 align-items: center;
 justify-content: center;
 
@@ -108,7 +118,5 @@ footer {
 }
 
 .buttonContainer {
-  width: 100%;
   display: flex;
-  justify-content:space-between;
 }
