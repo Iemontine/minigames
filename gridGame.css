@@ -1,6 +1,6 @@
 * { /* Global variables */
-  --size: calc(60px); /* TODO: * 5vh */
-  --dimension:12;
+  --size: calc(70px); /* TODO: * 5vh */
+  --dimension:11;
 }
 
 body, html {
@@ -43,23 +43,23 @@ body, html {
     align-items: center;
 }
 
-.player {
-    position: relative;
-    background-size: 200%;
-}
-
 .sprite {
     content: '';
     position: absolute;
-    width: 150px; height: 150px;
-    background: url('gridGame/8.png') no-repeat center center;
-    background-size: contain;
+    width: 70px; 
+    height: 70px;
+    background: url('gridGame/idle.png') no-repeat center center;
+    background-size: cover;
 }
     
 .block {
     background-color: green;
 }
 
-.hidden {
-    background-color: white;
+.wall {
+    background-color: black;
+}
+
+.solution {
+    background-color: purple;
 }
