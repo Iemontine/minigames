@@ -46,13 +46,11 @@ body, html {
 .player {
     position: relative;
     background-size: 200%;
-    background-color:aquamarine;
 }
 
-.player::before {
+.sprite {
     content: '';
     position: absolute;
-    top: -40px;
     width: 150px; height: 150px;
     background: url('gridGame/8.png') no-repeat center center;
     background-size: contain;
