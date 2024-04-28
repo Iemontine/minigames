@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let max_molesOut = 1;
 	let timeLeft = 60;
 	let peepRate = 1000;
-	let peepLength = 1000;
+	let peepLength = 1500;
 
 	function resetGame() {
 		score = 0;
@@ -46,12 +46,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		for (let i = 0; i < molesOut; i++) {	// Random number of
 			const mole = randomMole(moles);
 			if (mole.getAttribute("src") == "image1.png") {
-				mole.src = 'image2.png'; // Mole pops out
-
+				mole.src = 'image1.png'; // Mole pops out
+				moveMoleUp(mole);
+				console.log(mole.style);
 				mole.dataset.hit = true;
 			}
 			setTimeout(() => {
 				mole.src = 'image1.png'; // Mole goes back
+				moveMoleDown(mole);
 				delete mole.dataset.hit; // Reset hit target
 			}, peepLength);
 		}
@@ -67,6 +69,35 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 		// TODO: variable lengths depending on number of moles that are out?
 		setTimeout(peep, molesOut > 0 ? peepLength + peepRate : peepRate);
+	}
+
+	function moveMoleUp(mole) {
+		let pos = -55;
+		clearInterval(null);
+		let id = setInterval(frame, 1);
+		function frame() {
+			if (pos === 0) {
+						clearInterval(id);
+					} else {
+						pos++;
+						mole.style.bottom = pos + "px";
+					}
+		}
+	}
+
+	function moveMoleDown(mole) {
+		let pos = 0;
+		clearInterval(null);
+		let id = setInterval(frame, .5);
+		function frame() {
+			if (pos === -55) {
+						clearInterval(id);
+					} else {
+						pos--;
+						mole.style.bottom = pos + "px";
+
+					}
+		}
 	}
 
 	function startGame() {

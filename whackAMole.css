@@ -147,12 +147,12 @@ a:visited {
 
 .mask {
 	position: absolute;
-	bottom: -50px;
+	bottom: -60px;
 	width: 120px;
-	height: 80px;
+	height: 90px;
 	/* clip-path: invert(ellipse(50% 50% at 50% 0%)); */
 	clip-path: path(
-		'M 0 90 L 109 90 L 109 15 L 109 15 A 100 80 0 0 1 5 15 L 0 15 L 0 90');
+		'M 0 100 L 109 100 L 109 15 L 109 15 A 100 80 0 0 1 5 15 L 0 15 L 0 100');
 
 	background-color: #333;
 	z-index: 1;
@@ -162,6 +162,8 @@ a:visited {
 .mole {
 	width: 100px;
 	z-index: 0;
+	position: absolute;
+	bottom: -55px;
 	transition: transform 0.3s ease;
     -webkit-user-select: none;
     -khtml-user-select: none;
