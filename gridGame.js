@@ -3,10 +3,20 @@
 let grid = document.getElementById("gameGrid");
 let gridSize = 11;
 let playerPosition = { x: 1, y: 1 };
-let blocks = [{ x: 3, y: 3 }, { x: 5, y: 5 }];
+let blocks;
 let solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
 let walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0']);
-let blockColors = {};
+
+document.addEventListener("DOMContentLoaded", (event) => {
+	function generateColor() {
+		return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+	}
+	blocks = [{ x: 3, y: 3, color: generateColor() }, { x: 5, y: 5, color: generateColor() }];
+	// Start game
+	setupGame();
+});
+
+
 
 const setupGame = () => {
 	for (let i = 0; i < gridSize * gridSize; i++) {
@@ -15,14 +25,8 @@ const setupGame = () => {
 		grid.appendChild(cell);
 	}
 
-	// Generate unique color for each block-cell pairing
-	blocks.forEach((block, index) => {
-		const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`; // Generate a random HEX color value
-		blockColors[`${block.x},${block.y}`] = color; // Assign color to block
-		// Assign same color to corresponding solution cell
-		if (solutions[index]) {
-			blockColors[`${solutions[index].x},${solutions[index].y}`] = color; 
-		}
+	solutions.forEach((solution, index) => {
+		solution.color = blocks[index].color;
 	});
 
 	updateGame();
@@ -68,9 +72,9 @@ const movePlayer = (dx, dy) => {
 				} 
 				// Push the block until it hits the edge/wall, or another block
 				if (inSolution(newBlockPosition))
-					blocks[index] = { x: newBlockPosition.x, y: newBlockPosition.y };
+					blocks[index] = { x: newBlockPosition.x, y: newBlockPosition.y, color: blocks[index].color};
 				else
-					blocks[index] = { x: newBlockPosition.x - dx, y: newBlockPosition.y - dy };
+					blocks[index] = { x: newBlockPosition.x - dx, y: newBlockPosition.y - dy, color: blocks[index].color };
 				
 				// Freeze movement to allow for hitting animation to play
 				animatePlayerHit(blockMoved, () => {
@@ -139,6 +143,7 @@ const animatePlayerHit = (blockMoved, callback) => {
 // Update game grid
 const updateGame = () => {
 	// Register and render each cell type
+
 	document.querySelectorAll('.cell').forEach((cell, i) => {
 		let x = i % gridSize;
 		let y = Math.floor(i / gridSize);
@@ -149,16 +154,24 @@ const updateGame = () => {
 			let spriteDiv = document.createElement('div');
 			spriteDiv.classList.add('sprite');
 			cell.appendChild(spriteDiv); // Append sprite div into the cell
-		} else if (blocks.some(blockPos => blockPos.x === x && blockPos.y === y)) {
-			cell.classList.add('block');
-			cell.style.backgroundColor = blockColors[`${x},${y}`];
-		} else if (solutions.some(solutionPos => solutionPos.x === x && solutionPos.y === y)) {
-			cell.classList.add('solution');
-			cell.style.backgroundColor = blockColors[`${x},${y}`];
-		} else if (walls.has(`${x},${y}`)) {
-			cell.classList.add('wall');
+		} else {
+			let block = blocks.find(block => block.x === x && block.y === y);
+			let solution = solutions.find(solution => solution.x === x && solution.y === y);
+			if (block) {
+				cell.classList.add('block');
+				cell.style.backgroundColor = block.color; // Use foundBlock's color
+			} else if (solution) {
+				cell.classList.add('solution');
+				cell.style.backgroundColor = solution.color; // Use foundSolution's color
+			} else if (walls.has(`${x},${y}`)) {
+				cell.classList.add('wall');
+			}
+			else {
+				cell.style.backgroundColor = "lightgrey";
+			}
 		}
 	});
+
 	checkVictory();
 };
 const checkVictory = () => {
@@ -199,6 +212,3 @@ document.querySelectorAll('.control-btn').forEach(btn => {
 		}
 	});
 });
-
-// Start game
-setupGame();
