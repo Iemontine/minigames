@@ -199,7 +199,7 @@ a:visited {
   font-size: 15px;
 
 	margin-top: 20px;
-	z-index: 1;
+	z-index: 5;
 }
 
 .button:hover {
@@ -226,4 +226,20 @@ a:visited {
 	border: solid 5px rgb(255, 217, 0);
   box-shadow: inset 0 0 10px rgb(255, 109, 11), 0 0 10px rgb(255, 109, 11);
 
+}
+
+.z1 {
+	z-index: 1;
+}
+
+.z2 {
+	z-index: 2;
+}
+
+.z3 {
+	z-index: 3;
+}
+
+.z4 {
+	z-index: 4;
 }
