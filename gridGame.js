@@ -9,6 +9,7 @@ let level = 1;
 let isMoving = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+	// Generate the game grid
 	const grid = document.getElementById("gameGrid");
 	for (let i = 0; i < gridSize * gridSize; i++) {
 		const cell = document.createElement("div");
@@ -81,19 +82,28 @@ const setupGame = () => {
 		blocks = [
 			{ x: 4, y: 3, color: generateColor() },
 			{ x: 4, y: 6, color: generateColor() },
+			{ x: 6, y: 4, color: generateColor() },
+			{ x: 6, y: 7, color: generateColor() },
+			{ x: 9, y: 3, color: generateColor() },
+			{ x: 9, y: 6, color: generateColor() },
 		];
 		solutions = [
 			{ x: 3, y: 5 },
 			{ x: 5, y: 6 },
+			{ x: 7, y: 4 },
+			{ x: 7, y: 7 },
+			{ x: 10, y: 3 },
+			{ x: 10, y: 6 },
 		];
 		playerPosition = { x: 1, y: 1 };
 	}
 
+	// Assign colors to solutions based on corresponding blocks
 	solutions.forEach((solution, index) => {
 		solution.color = blocks[index].color;
 	});
-	updateGame();
-	isMoving = false; // Reenable movement between levels
+	updateGame(); 		// Update the game grid with the modified solutions
+	isMoving = false; 	// Reenable movement between levels
 };
 
 const inWall = (position) => {
@@ -112,16 +122,19 @@ const inBounds = (position) => {
 };
 const movePlayer = (dx, dy) => {
 	if (isMoving) return;
+	// Calculate the new position based on the player's movement
 	const newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
 
+	// Check if the new position is within the game grid bounds
 	if (inBounds(newPosition)) {
 		isMoving = true;
 
+		// Calculate the size of each cell in the grid
 		const cellSize = document.querySelector(".cell").offsetWidth;
 		const translateX = dx * cellSize;
 		const translateY = dy * cellSize;
 		
-		// Check collision and if player moves into a block
+		// Check for collision and if the player moves into a block
 		let collision = false;
 		blocks.forEach((block, index) => {
 			// Check if the player is moving into any block
@@ -137,7 +150,8 @@ const movePlayer = (dx, dy) => {
 					newBlockPosition.y += dy;
 					blockMoved = true;
 				}
-				// Push the block until it hits the edge/wall, or another block
+				
+				// Push the block until it hits the edge/wall or another block
 				if (inSolution(newBlockPosition))
 					blocks[index] = {
 						x: newBlockPosition.x,
@@ -151,6 +165,7 @@ const movePlayer = (dx, dy) => {
 						color: blocks[index].color,
 					};
 
+				// Animate the player's hit and update the game after the animation
 				animatePlayerHit(blockMoved, () => {
 					isMoving = false;
 					updateGame();
@@ -159,7 +174,7 @@ const movePlayer = (dx, dy) => {
 			}
 		});
 
-		// If did not collide with anything, player was able to move
+		// If there was no collision, the player was able to move
 		if (!collision) {
 			playerPosition = newPosition;
 			// Freeze movement to allow for movement animation to play
@@ -171,6 +186,7 @@ const movePlayer = (dx, dy) => {
 	}
 };
 
+// Keep track of the player's movement direction
 let direction;
 let lastDirection = 1;
 const animatePlayerMovement = (dx, dy, callback) => {
@@ -251,12 +267,12 @@ const updateGame = () => {
 			const spriteDiv = document.createElement("div");
 			spriteDiv.classList.add("sprite");
 			if (direction < 0) {
-				spriteDiv.style.transform = 'scaleX(1)';
+				spriteDiv.style.transform = 'scaleX(1)'; // Flip sprite horizontally if moving left
 			} else if (direction > 0) {
-				spriteDiv.style.transform = 'scaleX(-1)';
+				spriteDiv.style.transform = 'scaleX(-1)'; // Flip sprite horizontally if moving right
 			}
 			else {
-				spriteDiv.style.transform = `scaleX(${lastDirection})`;
+				spriteDiv.style.transform = `scaleX(${lastDirection})`; // Maintain previous direction if not moving horizontally
 			}
 			cell.appendChild(spriteDiv);
 		} else {
@@ -284,7 +300,7 @@ const updateGame = () => {
 			}
 		}
 	});
-	checkVictory();
+	checkVictory(); // Check if the player has solved the level
 };
 
 const checkVictory = () => {
@@ -296,7 +312,6 @@ const checkVictory = () => {
 		showVictoryPopup();
 	}
 };
-
 
 // Controls
 let pressUp = false, pressDown = false, pressLeft = false, pressRight = false;
