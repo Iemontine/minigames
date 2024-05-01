@@ -2,34 +2,55 @@
 
 let grid = document.getElementById("gameGrid");
 let gridSize = 11;
-let playerPosition = { x: 1, y: 1 };
+let playerPosition;
 let blocks;
-let solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
-let walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0']);
+let solutions;
+let walls;
+let level = 1;
+let isMoving = false;
 
 document.addEventListener("DOMContentLoaded", (event) => {
-	function generateColor() {
-		return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-	}
-	blocks = [{ x: 3, y: 3, color: generateColor() }, { x: 5, y: 5, color: generateColor() }];
-	// Start game
-	setupGame();
-});
-
-
-
-const setupGame = () => {
 	for (let i = 0; i < gridSize * gridSize; i++) {
 		let cell = document.createElement('div');
 		cell.classList.add('cell');
 		grid.appendChild(cell);
 	}
 
+	// let audio = new Audio('/gridGame/devmusic.mp3');
+	// audio.loop = true;
+	// const promise = audio.play();
+
+	// Start game
+	setupGame();
+});
+
+const setupGame = () => {
+	function generateColor() {
+		return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+	}
+
+	if (level == 1) {
+		walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0', '3,7',]);
+		blocks = [{ x: 4, y: 3, color: generateColor() }, { x: 4, y: 6, color: generateColor() }];
+		solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
+		playerPosition = { x: 1, y: 1 };
+	}
+	else if (level == 2) {
+		// walls = new Set([]);
+		// blocks = [];
+		// solutions = [];
+		// playerPosition = { x: 0, y: 0 };
+		walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0', '3,7',]);
+		blocks = [{ x: 4, y: 3, color: generateColor() }, { x: 4, y: 6, color: generateColor() }];
+		solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
+		playerPosition = { x: 1, y: 1 };
+	}
+
 	solutions.forEach((solution, index) => {
 		solution.color = blocks[index].color;
 	});
-
 	updateGame();
+	isMoving = false; // Reenable movement between levels
 };
 
 // Handle player movement
@@ -46,7 +67,6 @@ const inBounds = (position) => {
 		&& position.y < gridSize
 		&& !walls.has(`${position.x},${position.y}`);
 };
-let isMoving = false;
 const movePlayer = (dx, dy) => {
 	if (isMoving) return;
 	let newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
@@ -143,7 +163,6 @@ const animatePlayerHit = (blockMoved, callback) => {
 // Update game grid
 const updateGame = () => {
 	// Register and render each cell type
-
 	document.querySelectorAll('.cell').forEach((cell, i) => {
 		let x = i % gridSize;
 		let y = Math.floor(i / gridSize);
@@ -159,15 +178,17 @@ const updateGame = () => {
 			let solution = solutions.find(solution => solution.x === x && solution.y === y);
 			if (block) {
 				cell.classList.add('block');
-				cell.style.backgroundColor = block.color; // Use foundBlock's color
+				cell.style.backgroundColor = "rgb(24, 24, 24)";
+				cell.style.boxShadow = `inset 0 0 10px ${block.color}, 0 0 10px ${block.color}`
 			} else if (solution) {
 				cell.classList.add('solution');
 				cell.style.backgroundColor = solution.color; // Use foundSolution's color
+				cell.style.boxShadow = `inset 0 0 10px ${solution.color}, 0 0 10px ${solution.color}`
 			} else if (walls.has(`${x},${y}`)) {
 				cell.classList.add('wall');
 			}
 			else {
-				cell.style.backgroundColor = "lightgrey";
+				cell.style.boxShadow = "none";
 			}
 		}
 	});
@@ -175,11 +196,10 @@ const updateGame = () => {
 	checkVictory();
 };
 const checkVictory = () => {
-	const allSolved = blocks.every((block, index) => {
-		return block.x === solutions[index].x && block.y === solutions[index].y;
-	});
-	if (allSolved) {
-		console.log('All blocks are in their solution cells.');
+	const allSolved = blocks.every((block, index) =>
+		block.x === solutions[index].x && block.y === solutions[index].y);
+	if (allSolved && blocks.length > 0 && solutions.length > 0) {
+		showVictoryPopup();
 	}
 };
 
@@ -211,4 +231,28 @@ document.querySelectorAll('.control-btn').forEach(btn => {
 			case 'right': movePlayer(1, 0); break;
 		}
 	});
+});
+
+// Listen for the Main Menu button
+document.getElementById('mainMenuButton').addEventListener('click', () => {
+	window.location.href = "index.html";
+});
+
+const showVictoryPopup = () => {
+	let popup = document.getElementById('popup');
+	popup.style.display = 'block'; // Show the popup
+	isMoving = true; // Disable movement
+};
+
+const nextLevel = () => {
+	level += 1;
+	setupGame();
+	let popup = document.getElementById('popup');
+	popup.style.display = 'none'; // Hide the popup
+};
+// Restart current level
+document.addEventListener('keydown', (e) => {
+	if (e.key === 'r' || e.key === 'R') {
+		setupGame(); // Resets the current level
+	}
 });
