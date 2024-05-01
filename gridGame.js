@@ -1,7 +1,6 @@
 "use strict";
 
-let grid = document.getElementById("gameGrid");
-let gridSize = 11;
+const gridSize = 11;
 let playerPosition;
 let blocks;
 let solutions;
@@ -9,10 +8,11 @@ let walls;
 let level = 1;
 let isMoving = false;
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
+	const grid = document.getElementById("gameGrid");
 	for (let i = 0; i < gridSize * gridSize; i++) {
-		let cell = document.createElement('div');
-		cell.classList.add('cell');
+		const cell = document.createElement("div");
+		cell.classList.add("cell");
 		grid.appendChild(cell);
 	}
 
@@ -26,23 +26,64 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 const setupGame = () => {
 	function generateColor() {
-		return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+		// Generate a random color using HSL to ensure high contrast
+		const h = Math.floor(Math.random() * 360);
+		const s = Math.floor(Math.random() * 50) + 50;
+		const l = Math.floor(Math.random() * 30) + 50;
+		return `hsl(${h}, ${s}%, ${l}%)`;
 	}
 
-	if (level == 1) {
-		walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0', '3,7',]);
-		blocks = [{ x: 4, y: 3, color: generateColor() }, { x: 4, y: 6, color: generateColor() }];
-		solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
+	if (level === 1) {
+		walls = new Set([
+			"0,1",
+			"0,0",
+			"2,1",
+			"3,1",
+			"4,1",
+			"8,4",
+			"5,1",
+			"6,1",
+			"7,1",
+			"8,1",
+			"9,1",
+			"11,1",
+			"11,0",
+			"3,7",
+		]);
+		blocks = [
+			{ x: 4, y: 3, color: generateColor() },
+			{ x: 4, y: 6, color: generateColor() },
+		];
+		solutions = [
+			{ x: 3, y: 5 },
+			{ x: 5, y: 6 },
+		];
 		playerPosition = { x: 1, y: 1 };
-	}
-	else if (level == 2) {
-		// walls = new Set([]);
-		// blocks = [];
-		// solutions = [];
-		// playerPosition = { x: 0, y: 0 };
-		walls = new Set(['0,1', '0,0', '2,1', '3,1', '4,1', '8,4', '5,1', '6,1', '7,1', '8,1', '9,1', '11,1', '11,0', '3,7',]);
-		blocks = [{ x: 4, y: 3, color: generateColor() }, { x: 4, y: 6, color: generateColor() }];
-		solutions = [{ x: 3, y: 5 }, { x: 5, y: 6 }];
+	} else if (level === 2) {
+		walls = new Set([
+			"0,1",
+			"0,0",
+			"2,1",
+			"3,1",
+			"4,1",
+			"8,4",
+			"5,1",
+			"6,1",
+			"7,1",
+			"8,1",
+			"9,1",
+			"11,1",
+			"11,0",
+			"3,7",
+		]);
+		blocks = [
+			{ x: 4, y: 3, color: generateColor() },
+			{ x: 4, y: 6, color: generateColor() },
+		];
+		solutions = [
+			{ x: 3, y: 5 },
+			{ x: 5, y: 6 },
+		];
 		playerPosition = { x: 1, y: 1 };
 	}
 
@@ -53,54 +94,65 @@ const setupGame = () => {
 	isMoving = false; // Reenable movement between levels
 };
 
-// Handle player movement
 const inWall = (position) => {
 	return blocks.some((block) => position.x === block.x && position.y === block.y);
-}
+};
 const inSolution = (position) => {
 	return solutions.some((solution) => position.x === solution.x && position.y === solution.y);
-}
+};
 const inBounds = (position) => {
-	return position.x >= 0
+	return (position.x >= 0
 		&& position.x < gridSize
 		&& position.y >= 0
 		&& position.y < gridSize
-		&& !walls.has(`${position.x},${position.y}`);
+		&& !walls.has(`${position.x},${position.y}`)
+	);
 };
 const movePlayer = (dx, dy) => {
 	if (isMoving) return;
-	let newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
+	const newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
 
 	if (inBounds(newPosition)) {
 		isMoving = true;
 
-		let cellSize = document.querySelector('.cell').offsetWidth;
-		let translateX = dx * cellSize;
-		let translateY = dy * cellSize;
-
+		const cellSize = document.querySelector(".cell").offsetWidth;
+		const translateX = dx * cellSize;
+		const translateY = dy * cellSize;
+		
 		// Check collision and if player moves into a block
 		let collision = false;
 		blocks.forEach((block, index) => {
 			// Check if the player is moving into any block
 			if (newPosition.x === block.x && newPosition.y === block.y) {
 				let blockMoved = false;
-				let newBlockPosition = { x: block.x + dx, y: block.y + dy};
-				while (inBounds(newBlockPosition) && !inWall(newBlockPosition) && !inSolution(newBlockPosition)) {
+				let newBlockPosition = { x: block.x + dx, y: block.y + dy };
+				while (
+					inBounds(newBlockPosition) &&
+					!inWall(newBlockPosition) &&
+					!inSolution(newBlockPosition)
+				) {
 					newBlockPosition.x += dx;
 					newBlockPosition.y += dy;
 					blockMoved = true;
-				} 
+				}
 				// Push the block until it hits the edge/wall, or another block
 				if (inSolution(newBlockPosition))
-					blocks[index] = { x: newBlockPosition.x, y: newBlockPosition.y, color: blocks[index].color};
+					blocks[index] = {
+						x: newBlockPosition.x,
+						y: newBlockPosition.y,
+						color: blocks[index].color,
+					};
 				else
-					blocks[index] = { x: newBlockPosition.x - dx, y: newBlockPosition.y - dy, color: blocks[index].color };
-				
-				// Freeze movement to allow for hitting animation to play
+					blocks[index] = {
+						x: newBlockPosition.x - dx,
+						y: newBlockPosition.y - dy,
+						color: blocks[index].color,
+					};
+
 				animatePlayerHit(blockMoved, () => {
 					isMoving = false;
 					updateGame();
-				});
+				}, dx);
 				collision = true;
 			}
 		});
@@ -116,92 +168,133 @@ const movePlayer = (dx, dy) => {
 		}
 	}
 };
-const animatePlayerMovement = (dx, dy, callback) => {
-	let sprite = document.querySelector('.player .sprite');
-	if (sprite) {
-		let translation = `translate(${dx}px, ${dy}px)`;
 
-		sprite.style.transition = 'transform 100ms linear';
+let direction;
+let lastDirection = 1;
+const animatePlayerMovement = (dx, dy, callback) => {
+	direction = dx;
+	const sprite = document.querySelector(".player .sprite");
+	if (sprite) {
+		const translation = `translate(${dx}px, ${dy}px)`;
+
+		sprite.style.transition = "transform 100ms ease-in";
 		sprite.style.transform = translation;
 		// Replace the sprite with a gif, ensuring the gif is restarted
 		sprite.style.background = `url('gridGame/move.gif?${new Date().getTime()}') no-repeat center center`;
-		sprite.style.backgroundSize = 'cover';
+		sprite.style.backgroundSize = "cover";
+
+		if (dx > 0) {
+			sprite.style.transform += " scaleX(-1)";
+			lastDirection = -1;
+		} else if (dx < 0) {
+			sprite.style.transform += " scaleX(1)";
+			lastDirection = 1;
+		} else {
+			sprite.style.transform += ` scaleX(${lastDirection})`;
+		}
 
 		setTimeout(() => {
-			sprite.style.transition = '';
-			sprite.style.transform = '';
-			sprite.style.background = "url('gridGame/idle.png') no-repeat center center";
-			sprite.style.backgroundSize = 'cover';
+			sprite.style.transition = "";
+			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
+			sprite.style.backgroundSize = "cover";
 			callback();
 		}, 100);
 	}
 };
-const animatePlayerHit = (blockMoved, callback) => {
-	let sprite = document.querySelector('.player .sprite');
+
+const animatePlayerHit = (blockMoved, callback, direction) => {
+	const sprite = document.querySelector(".player .sprite");
 	if (sprite) {
+		// Adjust sprite scale based on direction hit
+		if (direction > 0) {
+			sprite.style.transform = "scaleX(-1)";
+			lastDirection = -1;
+		} else if (direction < 0) {
+			sprite.style.transform = "scaleX(1)";
+			lastDirection = 1;
+		}
+
 		// Replace the sprite with a gif, ensuring the gif is restarted
-		sprite.style.background = `url(gridGame/hit.gif?${new Date().getTime()})`;
-		sprite.style.backgroundSize = 'cover';
+		sprite.style.background = `url('gridGame/hit.gif?${new Date().getTime()}') no-repeat center center`;
+		sprite.style.backgroundSize = "cover";
 
 		let audio;
 		if (blockMoved) {
-			audio = new Audio('/gridGame/hit.wav');
+			audio = new Audio("/gridGame/hit.wav");
 		}
 		else {
-			audio = new Audio('/gridGame/bump.wav');
+			audio = new Audio("/gridGame/bump.wav");
 		}
 		audio.play();
 
 		setTimeout(() => {
-			sprite.style.background = 'url(gridGame/idle.png)';
-			sprite.style.backgroundSize = 'cover';
+			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
+			sprite.style.backgroundSize = "cover";
 			callback();
-		}, 100);
+		}, 120);
 	}
 };
 
 // Update game grid
 const updateGame = () => {
 	// Register and render each cell type
-	document.querySelectorAll('.cell').forEach((cell, i) => {
-		let x = i % gridSize;
-		let y = Math.floor(i / gridSize);
-		cell.innerHTML = ''; 		// Clear previous content
-		cell.className = 'cell'; 	// Reset cell class
+	document.querySelectorAll(".cell").forEach((cell, i) => {
+		const x = i % gridSize;
+		const y = Math.floor(i / gridSize);
+		cell.innerHTML = "";
+		cell.className = "cell";
+
 		if (x === playerPosition.x && y === playerPosition.y) {
-			cell.classList.add('player');
-			let spriteDiv = document.createElement('div');
-			spriteDiv.classList.add('sprite');
-			cell.appendChild(spriteDiv); // Append sprite div into the cell
-		} else {
-			let block = blocks.find(block => block.x === x && block.y === y);
-			let solution = solutions.find(solution => solution.x === x && solution.y === y);
-			if (block) {
-				cell.classList.add('block');
-				cell.style.backgroundColor = "rgb(24, 24, 24)";
-				cell.style.boxShadow = `inset 0 0 10px ${block.color}, 0 0 10px ${block.color}`
-			} else if (solution) {
-				cell.classList.add('solution');
-				cell.style.backgroundColor = solution.color; // Use foundSolution's color
-				cell.style.boxShadow = `inset 0 0 10px ${solution.color}, 0 0 10px ${solution.color}`
-			} else if (walls.has(`${x},${y}`)) {
-				cell.classList.add('wall');
+			cell.classList.add("player");
+			const spriteDiv = document.createElement("div");
+			spriteDiv.classList.add("sprite");
+			if (direction < 0) {
+				spriteDiv.style.transform = 'scaleX(1)';
+			} else if (direction > 0) {
+				spriteDiv.style.transform = 'scaleX(-1)';
 			}
 			else {
+				spriteDiv.style.transform = `scaleX(${lastDirection})`;
+			}
+			cell.appendChild(spriteDiv);
+		} else {
+			const block = blocks.find((block) => block.x === x && block.y === y);
+			const solution = solutions.find(
+				(solution) => solution.x === x && solution.y === y
+			);
+			if (block && solution) {
+				cell.classList.add("solution");
+				cell.style.backgroundColor = block.color;
+				cell.style.boxShadow = `inset 0 0 10px ${solution.color}, 0 0 10px ${solution.color}`;
+			} else if (block) {
+				cell.classList.add("block");
+				cell.style.backgroundColor = block.color;
+				cell.style.boxShadow = `inset 0 0 10px ${block.color}, 0 0 10px ${block.color}`;
+			} else if (solution) {
+				cell.classList.add("solution");
+				cell.style.backgroundColor = "rgb(24, 24, 24)";
+				cell.style.boxShadow = `inset 0 0 20px ${solution.color}, 0 0 20px ${solution.color}`;
+			} else if (walls.has(`${x},${y}`)) {
+				cell.classList.add("wall");
+			} else {
+				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = "none";
 			}
 		}
 	});
-
 	checkVictory();
 };
+
 const checkVictory = () => {
-	const allSolved = blocks.every((block, index) =>
-		block.x === solutions[index].x && block.y === solutions[index].y);
+	const allSolved = blocks.every(
+		(block, index) =>
+			block.x === solutions[index].x && block.y === solutions[index].y
+	);
 	if (allSolved && blocks.length > 0 && solutions.length > 0) {
 		showVictoryPopup();
 	}
 };
+
 
 // Controls
 let pressUp = false, pressDown = false, pressLeft = false, pressRight = false;
@@ -221,38 +314,39 @@ document.addEventListener('keyup', (e) => {
 		case 'ArrowRight': pressRight = false; break;
 	}
 });
-document.querySelectorAll('.control-btn').forEach(btn => {
-	btn.addEventListener('click', () => {
-		let id = btn.id;
+document.querySelectorAll(".control-btn").forEach((btn) => {
+	btn.addEventListener("click", () => {
+		const id = btn.id;
 		switch (id) {
-			case 'up': movePlayer(0, -1); break;
-			case 'down': movePlayer(0, 1); break;
-			case 'left': movePlayer(-1, 0); break;
-			case 'right': movePlayer(1, 0); break;
+			case "up": movePlayer(0, -1); break;
+			case "down": movePlayer(0, 1); break;
+			case "left": movePlayer(-1, 0); break;
+			case "right": movePlayer(1, 0); break;
 		}
 	});
 });
 
-// Listen for the Main Menu button
-document.getElementById('mainMenuButton').addEventListener('click', () => {
-	window.location.href = "index.html";
-});
-
 const showVictoryPopup = () => {
-	let popup = document.getElementById('popup');
-	popup.style.display = 'block'; // Show the popup
-	isMoving = true; // Disable movement
+	const popup = document.getElementById("popup");
+	popup.style.display = "block";
+	isMoving = true;
 };
 
 const nextLevel = () => {
 	level += 1;
 	setupGame();
-	let popup = document.getElementById('popup');
-	popup.style.display = 'none'; // Hide the popup
+	const popup = document.getElementById("popup");
+	popup.style.display = "none";
 };
 // Restart current level
-document.addEventListener('keydown', (e) => {
-	if (e.key === 'r' || e.key === 'R') {
+
+// Listen for the Main Menu button
+document.getElementById("mainMenuButton").addEventListener("click", () => {
+	window.location.href = "index.html";
+});
+
+document.addEventListener("keydown", (e) => {
+	if (e.key === "r" || e.key === "R") {
 		setupGame(); // Resets the current level
 	}
 });
