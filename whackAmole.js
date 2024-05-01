@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	function randomMole(moles) {
 		const idx = Math.floor(Math.random() * moles.length);
 		const mole = moles[idx];
-		if (mole.getAttribute("src") != "image1.png") {
+		if (mole.getAttribute("src") != "assets/mole.png") {
 			return randomMole(moles);
 		}
 		return mole;
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		for (let i = 0; i < molesOut; i++) {	// Random number of
 			const mole = randomMole(moles);
-			if (mole.getAttribute("src") == "image1.png") {
-				mole.src = 'image1.png'; // Mole pops out
+			if (mole.getAttribute("src") == "assets/mole.png") {
+				mole.src = 'assets/mole.png'; // Mole pops out
 				moveMoleUp(mole);
 				console.log(mole.style);
 				mole.dataset.hit = true;
 			}
 			setTimeout(() => {
-				mole.src = 'image1.png'; // Mole goes back
+				mole.src = 'assets/mole.png'; // Mole goes back
 				moveMoleDown(mole);
 				delete mole.dataset.hit; // Reset hit target
 			}, peepLength);
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (!gameRunning) return;
 			if (mole.dataset.hit) {
 				score += 10;
-				mole.src = 'image1.png'; // Change back immediately on hit
+				mole.src = 'assets/mole.png'; // Change back immediately on hit
 				lightRingGreen(mole);
 				delete mole.dataset.hit;
 			} else {

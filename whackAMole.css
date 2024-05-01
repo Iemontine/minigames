@@ -14,7 +14,6 @@ html {
 	margin: 0;
 	display: flex;
 	flex-direction: column;
-	/* justify-content: center; */
 	align-items: center;
 	background-color: #333;
 	width: 100%;
@@ -51,7 +50,6 @@ footer {
   font-family: 'tron2';
   color: white;
   text-shadow: 0 0 10px rgb(133, 220, 255);
-
 }
 
 a:visited {
@@ -151,8 +149,7 @@ a:visited {
 	width: 120px;
 	height: 90px;
 	/* clip-path: invert(ellipse(50% 50% at 50% 0%)); */
-	clip-path: path(
-		'M 0 100 L 109 100 L 109 15 L 109 15 A 100 80 0 0 1 5 15 L 0 15 L 0 100');
+	clip-path: path('M 0 100 L 109 100 L 109 15 L 109 15 A 100 80 0 0 1 5 15 L 0 15 L 0 95');
 
 	background-color: #333;
 	z-index: 1;
@@ -160,7 +157,8 @@ a:visited {
 
 
 .mole {
-	width: 100px;
+	width: 70px;
+	left:7px;
 	z-index: 0;
 	position: absolute;
 	bottom: -55px;
