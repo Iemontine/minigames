@@ -47,8 +47,10 @@ const setupGame = () => {
 			"8,1",
 			"9,1",
 			"11,1",
+			"11,2",
 			"11,0",
 			"3,7",
+			"4,7",
 		]);
 		blocks = [
 			{ x: 4, y: 3, color: generateColor() },
