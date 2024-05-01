@@ -81,7 +81,6 @@ let lineSpawner = setInterval(() => {
 }, 300);
 
 function animate() {
-	console.log(HorizontalArray.length);
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
 

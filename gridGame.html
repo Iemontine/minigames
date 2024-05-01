@@ -7,13 +7,23 @@
     <link rel="stylesheet" href="gridGame.css">
 </head>
 <body>
+    <button id="mainMenuButton"></button>
+    <header>Grid Game</header>
+    
+    <div id="popup" style="display: none;">
+        <div>Level Complete!</div>
+        <button onclick="nextLevel()">Next Level</button>
+    </div>
+
     <div id="gameGrid"></div>
     <div class="controls">
         <button class="control-btn" id="up">↑</button>
         <button class="control-btn" id="left">←</button>
         <button class="control-btn" id="down">↓</button>
-        <button class="control-btn" id="right">→</button>
+   
+     <button class="control-btn" id="right">→</button>
     </div>
+    <div id="restartText">Press R to restart</div>
     <script src="gridGame.js"></script>
 </body>
 </html>
