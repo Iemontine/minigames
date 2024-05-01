@@ -1,15 +1,63 @@
+@font-face {
+  font-family: tron;
+  src: url(./assets/Tr2n.ttf);
+}
+
+@font-face {
+  font-family: tron2;
+  src: url(./assets/Tron-JOAa.ttf);
+}
+
 body,
 html {
 	height: 100%;
 	margin: 0;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
 	align-items: center;
-	background-color: #f0f0f0;
+	background-color: #333;
+	width: 100%;
 }
 
+header {
+  height: 75px;
+	width: 100%;
+  text-align: center;
+  background: rgb(66, 66, 66);
+  font-family: 'tron';
+  color: white;
+  text-shadow: 0 0 10px rgb(133, 220, 255);
+  display: flex;
+  justify-content: center;
 
+}
+
+#title:hover {
+	cursor: pointer;
+}
+
+a {
+	text-decoration: none;
+}
+
+footer {
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgb(66, 66, 66);
+  font-family: 'tron2';
+  color: white;
+  text-shadow: 0 0 10px rgb(133, 220, 255);
+}
+
+a:visited {
+	text-decoration: none;
+	color: white;
+}
 .game-container {
+	margin-block: auto;
 	display: flex;
 	flex-direction: column;
 	width: 350px;
@@ -28,21 +76,92 @@ html {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	gap: 15px;
+	gap: 20px;
 }
 
 .mole-hole {
 	width: 100px;
 	height: 100px;
 	border-radius: 50%;
-	background-color: #8a6d3b;
+	background-color: transparent;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	position: relative;
+	
 }
 
+.frontHole {
+	position: absolute;
+	bottom: -10px;
+	width: 130px;
+	height: 25%;
+	background-color: transparent;
+  /* border-radius: 100%; */
+	overflow: hidden;
+  /* border: solid 3px white;
+  box-shadow: inset 0 0 10px rgb(133, 220, 255), 0 0 10px rgb(133, 220, 255); */
+}
+
+.frontHole::before {
+	content: '';
+	position: absolute;
+	left: 5px;	
+	bottom: 0px;
+	width: 97px;
+	height: 40px;
+	border-radius: 100%;
+  border: solid 6px white;
+
+	box-shadow: inset 0 0 10px rgb(133, 220, 255), 0 0 10px rgb(133, 220, 255);
+
+	transform: rotateX(60deg);
+	z-index: 2;
+}
+
+.backHole {
+	position: absolute;
+	bottom: 15px;
+	width: 130px;
+	height: 25px;
+	overflow: hidden;
+	background-color: transparent;
+}
+
+.backHole::before {
+	content: '';
+	position: absolute;
+	bottom: -25px;
+	left: 5px;
+	width: 97px;
+	height: 40px;
+	background-color: transparent;
+	border-radius: 100%;
+  border: solid 6px white;
+	box-shadow: 0 0 10px rgb(133, 220, 255), inset 0 0 10px rgb(133, 220, 255);
+	transform: rotateX(60deg);
+	z-index: -0.1;
+}
+
+.mask {
+	position: absolute;
+	bottom: -60px;
+	width: 120px;
+	height: 90px;
+	/* clip-path: invert(ellipse(50% 50% at 50% 0%)); */
+	clip-path: path('M 0 100 L 109 100 L 109 15 L 109 15 A 100 80 0 0 1 5 15 L 0 15 L 0 95');
+
+	background-color: #333;
+	z-index: 1;
+}
+
+
 .mole {
-	width: 100px;
+	width: 70px;
+	left:7px;
+	z-index: 0;
+	position: absolute;
+	bottom: -55px;
 	transition: transform 0.3s ease;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -57,7 +176,7 @@ html {
 
 .start-button {
 	position:absolute;
-	top: 70%;
+	top: 75%;
 	background-color: yellow;
 	border: none;
 	border-radius: 20px;
@@ -66,4 +185,61 @@ html {
 	cursor: pointer;
 
 	transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.button {
+  all: unset;
+	align-items: center;
+  width:max-content;
+  padding-inline: 5px;
+  padding-bottom: 5px;
+  border: solid 3px white;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgb(133, 220, 255), 0 0 10px rgb(133, 220, 255);
+  font-size: 15px;
+
+	margin-top: 20px;
+	z-index: 5;
+}
+
+.button:hover {
+  border: solid 3px rgb(255, 217, 0);
+  box-shadow: inset 0 0 10px rgb(255, 109, 11), 0 0 10px rgb(255, 109, 11);
+  color: rgb(255, 217, 0);
+  text-shadow: 0 0 10px rgb(255, 109, 11);
+  cursor: pointer;
+}
+
+.text {
+  font-family: 'tron2';
+  color: white;
+  text-shadow: 0 0 10px rgb(133, 220, 255);
+}
+
+.greenRing::before {
+	border: solid 5px rgb(163, 255, 42);
+	box-shadow: 0 0 10px rgb(81, 255, 95), inset 0 0 10px rgb(81, 255, 95);
+
+}
+
+.redRing::before {
+	border: solid 5px rgb(255, 217, 0);
+  box-shadow: inset 0 0 10px rgb(255, 109, 11), 0 0 10px rgb(255, 109, 11);
+
+}
+
+.z1 {
+	z-index: 1;
+}
+
+.z2 {
+	z-index: 2;
+}
+
+.z3 {
+	z-index: 3;
+}
+
+.z4 {
+	z-index: 4;
 }
