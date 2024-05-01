@@ -35,33 +35,26 @@ const setupGame = () => {
 	}
 
 	if (level === 1) {
-		walls = new Set([
-			"0,1",
-			"0,0",
-			"2,1",
-			"3,1",
-			"4,1",
-			"8,4",
-			"5,1",
-			"6,1",
-			"7,1",
-			"8,1",
-			"9,1",
-			"11,1",
-			"11,2",
-			"11,0",
-			"3,7",
-			"4,7",
-		]);
+		walls = new Set();  // Ensures `walls` is neither null nor undefined
+
+		for (let row = 0; row < 11; row++) {
+			for (let col = 0; col < 11; col++) {
+				if (row < 2 || row > 8 || col < 2 || col > 8) {
+					walls.add(`${row},${col}`);
+				}
+			}
+		}
+
+		console.log(walls);
 		blocks = [
-			{ x: 4, y: 3, color: generateColor() },
-			{ x: 4, y: 6, color: generateColor() },
+			{ x: 5, y: 6, color: generateColor() },
+			{ x: 3, y: 3, color: generateColor() },
 		];
 		solutions = [
-			{ x: 3, y: 5 },
-			{ x: 5, y: 6 },
+			{ x: 5, y: 4 },
+			{ x: 7, y: 3 },
 		];
-		playerPosition = { x: 1, y: 1 };
+		playerPosition = { x: 5, y: 8 };
 	} else if (level === 2) {
 		walls = new Set([
 			"0,1",
@@ -69,7 +62,6 @@ const setupGame = () => {
 			"2,1",
 			"3,1",
 			"4,1",
-			"8,4",
 			"5,1",
 			"6,1",
 			"7,1",
@@ -77,7 +69,6 @@ const setupGame = () => {
 			"9,1",
 			"11,1",
 			"11,0",
-			"3,7",
 		]);
 		blocks = [
 			{ x: 4, y: 3, color: generateColor() },
@@ -133,7 +124,7 @@ const movePlayer = (dx, dy) => {
 		const cellSize = document.querySelector(".cell").offsetWidth;
 		const translateX = dx * cellSize;
 		const translateY = dy * cellSize;
-		
+
 		// Check for collision and if the player moves into a block
 		let collision = false;
 		blocks.forEach((block, index) => {
@@ -150,26 +141,29 @@ const movePlayer = (dx, dy) => {
 					newBlockPosition.y += dy;
 					blockMoved = true;
 				}
-				
+
 				// Push the block until it hits the edge/wall or another block
-				if (inSolution(newBlockPosition))
+				if (inSolution(newBlockPosition)) {
 					blocks[index] = {
 						x: newBlockPosition.x,
 						y: newBlockPosition.y,
 						color: blocks[index].color,
 					};
-				else
+					blockMoved = true;
+				}
+				else {
 					blocks[index] = {
 						x: newBlockPosition.x - dx,
 						y: newBlockPosition.y - dy,
 						color: blocks[index].color,
 					};
+				}
 
 				// Animate the player's hit and update the game after the animation
-				animatePlayerHit(blockMoved, () => {
+				animatePlayerHit(blockMoved, dx, () => {
 					isMoving = false;
 					updateGame();
-				}, dx);
+				});
 				collision = true;
 			}
 		});
@@ -220,7 +214,7 @@ const animatePlayerMovement = (dx, dy, callback) => {
 	}
 };
 
-const animatePlayerHit = (blockMoved, callback, direction) => {
+const animatePlayerHit = (blockMoved, direction, callback) => {
 	const sprite = document.querySelector(".player .sprite");
 	if (sprite) {
 		// Adjust sprite scale based on direction hit
