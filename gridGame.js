@@ -5,6 +5,7 @@ let playerPosition;
 let blocks;
 let solutions;
 let walls;
+let wallSprites;
 let level = 1;
 let isMoving = false;
 
@@ -17,9 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		grid.appendChild(cell);
 	}
 
-	// let audio = new Audio('/gridGame/devmusic.mp3');
-	// audio.loop = true;
-	// const promise = audio.play();
+	let audio = new Audio('/gridGame/devmusic.mp3');
+	audio.loop = true;
+	const promise = audio.play();
 
 	// Start game
 	setupGame();
@@ -44,8 +45,9 @@ const setupGame = () => {
 				}
 			}
 		}
+		wallSprites = new Map();
+		wallSprites.set('0,0', 'left1')
 
-		console.log(walls);
 		blocks = [
 			{ x: 5, y: 6, color: generateColor() },
 			{ x: 3, y: 3, color: generateColor() },
@@ -114,6 +116,7 @@ const inBounds = (position) => {
 const movePlayer = (dx, dy) => {
 	if (isMoving) return;
 	// Calculate the new position based on the player's movement
+	const oldPlayerPosition = { x: playerPosition.x, y: playerPosition.y }
 	const newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
 
 	// Check if the new position is within the game grid bounds
@@ -130,12 +133,11 @@ const movePlayer = (dx, dy) => {
 		blocks.forEach((block, index) => {
 			// Check if the player is moving into any block
 			if (newPosition.x === block.x && newPosition.y === block.y) {
+				const oldBlockPositionX = block.x;
+				const oldBlockPositionY = block.y;
 				let blockMoved = false;
 				let newBlockPosition = { x: block.x + dx, y: block.y + dy };
-				while (
-					inBounds(newBlockPosition) &&
-					!inWall(newBlockPosition) &&
-					!inSolution(newBlockPosition)
+				while (inBounds(newBlockPosition) && !inWall(newBlockPosition) && !inSolution(newBlockPosition)
 				) {
 					newBlockPosition.x += dx;
 					newBlockPosition.y += dy;
@@ -159,6 +161,18 @@ const movePlayer = (dx, dy) => {
 					};
 				}
 
+				if (blockMoved) {
+					const oldBlockIndex = oldBlockPositionY * gridSize + oldBlockPositionX;
+					const oldBlockCell = document.querySelectorAll(".cell")[oldBlockIndex];
+					setTimeout(() => {
+						oldBlockCell.style.backgroundImage = `url('gridGame/block_hit.gif?${new Date().getTime()} no-repeat center center')`;
+						oldBlockCell.style.backgroundSize = "cover";
+					}, 100);
+					setTimeout(() => {
+						oldBlockCell.style.backgroundImage = "";
+					}, 575);
+				}
+
 				// Animate the player's hit and update the game after the animation
 				animatePlayerHit(blockMoved, dx, () => {
 					isMoving = false;
@@ -171,6 +185,18 @@ const movePlayer = (dx, dy) => {
 		// If there was no collision, the player was able to move
 		if (!collision) {
 			playerPosition = newPosition;
+
+			const oldPlayerIndex = oldPlayerPosition.y * gridSize + oldPlayerPosition.x;
+			const cells = document.querySelectorAll(".cell");
+			const oldPlayerCell = cells[oldPlayerIndex];
+			setTimeout(() => {
+				oldPlayerCell.style.backgroundImage = `url('gridGame/dash.gif?${new Date().getTime()}')`;
+				oldPlayerCell.style.backgroundSize = "cover";
+			}, 100);
+			setTimeout(() => {
+				oldPlayerCell.style.backgroundImage = "";
+			}, 600);
+
 			// Freeze movement to allow for movement animation to play
 			animatePlayerMovement(translateX, translateY, () => {
 				isMoving = false;
@@ -189,10 +215,10 @@ const animatePlayerMovement = (dx, dy, callback) => {
 	if (sprite) {
 		const translation = `translate(${dx}px, ${dy}px)`;
 
+
 		sprite.style.transition = "transform 100ms ease-in";
 		sprite.style.transform = translation;
-		// Replace the sprite with a gif, ensuring the gif is restarted
-		sprite.style.background = `url('gridGame/move.gif?${new Date().getTime()}') no-repeat center center`;
+		sprite.style.background = `url('gridGame/move.png') no-repeat center center`;
 		sprite.style.backgroundSize = "cover";
 
 		if (dx > 0) {
@@ -288,6 +314,8 @@ const updateGame = () => {
 				cell.style.boxShadow = `inset 0 0 20px ${solution.color}, 0 0 20px ${solution.color}`;
 			} else if (walls.has(`${x},${y}`)) {
 				cell.classList.add("wall");
+				const wallType = wallSprites.get(`${x},${y}`);
+				cell.style.backgroundImage = `url('gridGame/tiles/${wallType}.png')`;
 			} else {
 				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = "none";

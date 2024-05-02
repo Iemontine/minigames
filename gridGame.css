@@ -1,5 +1,5 @@
 * { /* Global variables */
-  --size: calc(70px); /* TODO: * 5vh */
+  --size: calc(60px); /* TODO: * 5vh */
   --dimension:11;
 }
 
@@ -57,6 +57,8 @@ body, html {
     
 .wall {
     background-color: rgb(0, 0, 0);
+    background-size: contain;   
+    image-rendering:pixelated; /* Disable anti-aliasing to prevent sprite blurring */
 }
 
 .solution {
@@ -72,6 +74,8 @@ body, html {
     width: calc(var(--size)-10px);
     height:  calc(var(--size)-10px);
     z-index:2;
+    transition: transform 300ms ease-out;
+    transform-origin: top left;
 }
 
 #popup {
@@ -101,18 +105,16 @@ body, html {
     cursor: pointer;
     background: url('gridGame/exit.png') no-repeat center center;
     background-size: contain;   
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border: none;
 }
 
-/* Header styles */
-header {
+header img {
     position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-    color: white;
+    top: 70px;
+    height: 200px;
+    left: 50px;
 }
 
 /* Restart text */
