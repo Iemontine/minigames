@@ -72,6 +72,8 @@ const setupGame = () => {
 			"11,1",
 			"11,0",
 		]);
+		wallSprites = new Map();
+		wallSprites.set('0,0', 'top')
 		blocks = [
 			{ x: 4, y: 3, color: generateColor() },
 			{ x: 4, y: 6, color: generateColor() },
