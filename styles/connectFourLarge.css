@@ -1,0 +1,42 @@
+
+html,
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+
+#board {
+  height: 700px;
+  width: 800px;  
+}
+
+.space {
+  height: 90px;
+  width: 90px;
+  background-color: #333;
+  border-radius: 100%;
+}
+
+
+#messageTab {
+  height: 100%;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-inline: auto;
+}
+
+.text {
+  font-size: 25px;
+}
+
+.buttonContainer {
+  width: 100%;
+
+  justify-content:space-between;
+}
