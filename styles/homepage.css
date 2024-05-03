@@ -91,7 +91,7 @@ html {
 	margin: 0 auto;
 	position: relative;
 	top: 0%;
-	font-size:30px;
+	font-size: 30px;
 	font-family: 'tron';
 }
 .panel1 .panel-text {
@@ -106,4 +106,27 @@ html {
 .panel3 .panel-text {
 	transform: skew(20deg, 25deg) rotate(20deg);
 	text-shadow: 0 0 10px rgb(255, 176, 133), 0 0 10px rgb(255, 176, 133);
+}
+
+@media (max-width: 800px) {
+	.panel-text{
+		font-size: 20px;
+	}
+	.panel1 {
+		width: 125px;
+		height: 125px;
+		left: 10px
+	}
+	.panel2 {
+		position:absolute;
+		width: 140px;
+		height: 140px;
+
+		top: 140px;
+	}
+	.panel3 {
+		width: 125px;
+		height: 125px;
+		right: 10px;
+	}
 }
