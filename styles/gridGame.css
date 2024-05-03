@@ -71,7 +71,7 @@ body, html {
 	position: absolute;
 	width: var(--size); 
 	height: var(--size);
-	background: url('minigames/gridGame/idle.gif') no-repeat center center;
+	background: url(../gridGame/idle.gif) no-repeat center center;
 	background-size: cover;
 	image-rendering: pixelated; /* Disable anti-aliasing to prevent sprite blurring */
 }
@@ -137,7 +137,7 @@ body, html {
 #mainMenuButton {
 	position: relative;
 	cursor: pointer;
-	background: url('minigames/gridGame/exit.png') no-repeat center center;
+	background: url(../gridGame/exit.png) no-repeat center center;
 	background-size: contain;   
 	width: 45px;
 	height: 45px;
@@ -147,7 +147,7 @@ body, html {
 	position: relative;
 	top:15px;
 	cursor: pointer;
-	background: url('minigames/gridGame/restart.png') no-repeat center center;
+	background: url(../gridGame/restart.png) no-repeat center center;
 	background-size: contain;
 	width: 60px;
 	height: 60px;
@@ -156,7 +156,7 @@ body, html {
 #muteButton {
 	position: relative;
 	cursor: pointer;
-	background: url('minigames/gridGame/jamming.png') no-repeat center center;
+	background: url(../gridGame/jamming.png) no-repeat center center;
 	background-size: contain;
 	width: 45px;
 	height: 45px;
