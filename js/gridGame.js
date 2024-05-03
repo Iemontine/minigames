@@ -564,7 +564,6 @@ document.querySelectorAll(".control-btn").forEach((btn) => {
 document.getElementById("popup").addEventListener("click", nextLevel);
 // Listen for the Mute button
 document.getElementById("muteButton").addEventListener("click", () => {
-	console.log("hello");
 	if (muted) {
 		site_music.play();
 		let musicButton = document.getElementById("muteButton");

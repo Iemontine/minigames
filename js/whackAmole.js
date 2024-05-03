@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (mole.getAttribute("src") == "assets/mole.png") {
 				mole.src = 'assets/mole.png'; // Mole pops out
 				moveMoleUp(mole);
-				console.log(mole.style);
 				mole.dataset.hit = true;
 			}
 			setTimeout(() => {
@@ -71,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (peepRate > 500) {
 				peepRate -= 10;
 			}
-			console.log(`${peepLength} ${peepRate}`);
 		}
 		// TODO: variable lengths depending on number of moles that are out?
 		setTimeout(peep, molesOut > 0 ? peepLength + peepRate : peepRate);
@@ -184,7 +182,6 @@ function resetLights(mole) {
 		let moleHole = mole.closest(".mole-hole");
 		let frontRing = moleHole.children[0];
 		let backRing = moleHole.children[1];
-		console.log(frontRing);
 		frontRing.classList.remove("greenRing");
 		backRing.classList.remove("greenRing");
 		frontRing.classList.remove("redRing");

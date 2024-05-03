@@ -77,7 +77,6 @@ function resetGame() {
  * @return {void}
 */
 function placePiece(e) {
-  console.log(typeof(e));
   if (gameOver) {
     endGame();
   }
