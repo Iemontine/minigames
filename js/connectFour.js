@@ -11,12 +11,10 @@ let colHeight = new Array(7).fill(5);
 let gameOver = false;
 let title = document.getElementById("title");
 title.addEventListener("click", () => {
-  window.location.href = "index.html";
+	window.location.href = "index.html";
 })
 
-window.onload = () => {
-	setGame();
-}
+window.onload = () => { setGame(); }
 
 /**
  * Creates game board and adds event listeners to spaces
@@ -25,48 +23,49 @@ window.onload = () => {
 function setGame() {
 	board = [];
 
-  for (let r = 0; r < rows; r++) {
-    let row = [];
-    for (let c = 0; c < cols; c++) {
-      row.push(0);
-      let space = document.createElement('div');
-      space.id = r.toString() + '-' + c.toString();
-      space.classList.add("space");
+	for (let r = 0; r < rows; r++) {
+		let row = [];
+		for (let c = 0; c < cols; c++) {
+			row.push(0);
+			let space = document.createElement('div');
+			space.id = r.toString() + '-' + c.toString();
+			space.classList.add("space");
 
-      space.addEventListener("click", placePiece);
-      space.addEventListener("mouseover", hoverCol);
-      space.addEventListener("mouseout", unHoverCol);
-      document.getElementById("board").append(space);
-    }
-    board.push(row);
-  }
-  setMessage();
+			space.addEventListener("click", placePiece);
+			space.addEventListener("mouseover", hoverCol);
+			space.addEventListener("mouseout", unHoverCol);
+			document.getElementById("board").append(space);
+		}
+		board.push(row);
+	}
+	setMessage();
 }
+
 /**
  * resets board and game to default parameters
  * @return {void}
  */
 function resetGame() {
-  board =[];
-  colHeight = Array(7).fill(5);
-  gameOver = false;
-  for (let r = 0; r < rows; r++) {
-    let row = [];
-    for (let c = 0; c < cols; c++) {
-      row.push(0);
-      let id = r.toString() + '-' + c.toString();
-      let space = document.getElementById(id);
-      space.classList.remove(...space.classList);
-      space.classList.add("space");
-      space.addEventListener("click", placePiece);
-      space.addEventListener("mouseover", hoverCol);
-      space.addEventListener("mouseout", unHoverCol);
-    }
-    board.push(row);
-  }
-  let messageContainer = document.getElementById("messageTab");
-  clearDiv(messageContainer);
-  setMessage();
+	board = [];
+	colHeight = Array(7).fill(5);
+	gameOver = false;
+	for (let r = 0; r < rows; r++) {
+		let row = [];
+		for (let c = 0; c < cols; c++) {
+			row.push(0);
+			let id = r.toString() + '-' + c.toString();
+			let space = document.getElementById(id);
+			space.classList.remove(...space.classList);
+			space.classList.add("space");
+			space.addEventListener("click", placePiece);
+			space.addEventListener("mouseover", hoverCol);
+			space.addEventListener("mouseout", unHoverCol);
+		}
+		board.push(row);
+	}
+	let messageContainer = document.getElementById("messageTab");
+	clearDiv(messageContainer);
+	setMessage();
 }
 
 /**
@@ -77,30 +76,24 @@ function resetGame() {
  * @return {void}
 */
 function placePiece(e) {
-  if (gameOver) {
-    endGame();
-  }
-  let [row,col] = getCoords(e);
-  if (colFull(col)) {
-    return;
-  }
-  row = colHeight[col];
-  
-  board[row][col] = currentPlayer;
-  colHeight[col]--;
-  let id = row + '-' + col;
-  let space = document.getElementById(id);
+	if (gameOver) endGame();
+	let [row, col] = getCoords(e);
+	if (colFull(col)) return;
 
-	space.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");   
+	row = colHeight[col];
 
-
-  checkForWin(row, col);
-  if (gameOver) {
-    endGame();
-    return;
-  }
-  currentPlayer = currentPlayer % 2 + 1;  // Set current player to other player
-  setMessage();
+	board[row][col] = currentPlayer;
+	colHeight[col]--;
+	let id = row + '-' + col;
+	let space = document.getElementById(id);
+	space.classList.add(currentPlayer == 1 ? "bluePiece" : "yellowPiece");
+	checkForWin(row, col);
+	if (gameOver) {
+		endGame();
+		return;
+	}
+	currentPlayer = currentPlayer % 2 + 1;  // Set current player to other player
+	setMessage();
 }
 
 /**
@@ -109,14 +102,14 @@ function placePiece(e) {
  * @return {void}
  */
 function clearDiv(container) {
-  while (container.firstChild) {
-    container.removeChild(container.firstChild);
-  }
+	while (container.firstChild) {
+		container.removeChild(container.firstChild);
+	}
 }
 
 function endGame() {
-  removeInteractivity();
-  promptForGame();
+	removeInteractivity();
+	promptForGame();
 }
 
 /**
@@ -124,31 +117,31 @@ function endGame() {
  * @return {void}
  */
 function promptForGame() {
-  let winnerMessage = "player " + currentPlayer + " wins !"; 
-  let messageTab = document.getElementById("messageTab");
-  clearDiv(messageTab);
-  addMessage(winnerMessage, messageTab);
-  let buttonContainer = addDiv(messageTab, ["buttonContainer"]);
-  let playAgainButton = addButton("play again", buttonContainer, ["button"]);
-  playAgainButton.addEventListener("click", resetGame);
-  let quitButton = addButton("quit", buttonContainer, ["button"])
-  quitButton.addEventListener("click", quitGame);
+	let winnerMessage = "player " + currentPlayer + " wins !";
+	let messageTab = document.getElementById("messageTab");
+	clearDiv(messageTab);
+	addMessage(winnerMessage, messageTab);
+	let buttonContainer = addDiv(messageTab, ["buttonContainer"]);
+	let playAgainButton = addButton("play again", buttonContainer, ["button"]);
+	playAgainButton.addEventListener("click", resetGame);
+	let quitButton = addButton("quit", buttonContainer, ["button"])
+	quitButton.addEventListener("click", quitGame);
 }
 
 /**
  * Sets message tab to tell whos currently playing
  * @return {void}
- */ 
+ */
 function setMessage() {
-  let messageContainer = document.getElementById("messageTab");
-  clearDiv(messageContainer);
-  let message = "player " + currentPlayer + "'s turn";
-  addMessage(message, messageTab);
+	let messageContainer = document.getElementById("messageTab");
+	clearDiv(messageContainer);
+	let message = "player " + currentPlayer + "'s turn";
+	addMessage(message, messageTab);
 }
 
 // navigate to home page
 function quitGame() {
-  window.location.href = "index.html";
+	window.location.href = "index.html";
 }
 
 /**
@@ -156,14 +149,14 @@ function quitGame() {
  * @param {Element} container - the parent element 
  * @param {string[]} classes - list of classes to be added to child div
  * @return {Element} div - the child element with the classes specified
- */ 
+ */
 function addDiv(container, classes) {
-  let div = document.createElement("div");
-  classes.forEach(c => {
-    div.classList.add(c);
-  })
-  container.appendChild(div);
-  return div;
+	let div = document.createElement("div");
+	classes.forEach(c => {
+		div.classList.add(c);
+	})
+	container.appendChild(div);
+	return div;
 }
 
 /**
@@ -174,13 +167,13 @@ function addDiv(container, classes) {
  * @return {Element} button - the child button with classes specified
  */
 function addButton(text, container, classes) {
-  let button = document.createElement("button");
-  button.innerText = text;
-  classes.forEach(c => {
-    button.classList.add(c);
-  })
-  container.appendChild(button);
-  return button;
+	let button = document.createElement("button");
+	button.innerText = text;
+	classes.forEach(c => {
+		button.classList.add(c);
+	})
+	container.appendChild(button);
+	return button;
 }
 
 /**
@@ -188,27 +181,26 @@ function addButton(text, container, classes) {
  * @param {string} message - message to be added into container
  * @param {Element} container - parent element message will be added to
  * @return {Element} messageElement - child p element returned
- */ 
- 
+ */
 function addMessage(message, container) {
-  let messageElement = document.createElement("p");
-  let text = document.createTextNode(message);
-  messageElement.append(text);
-  container.appendChild(messageElement);
-  return messageElement;
+	let messageElement = document.createElement("p");
+	let text = document.createTextNode(message);
+	messageElement.append(text);
+	container.appendChild(messageElement);
+	return messageElement;
 }
 
 // removes interactivity of board
 function removeInteractivity() {
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      let id = r.toString() + '-' + c.toString();
-      let space = document.getElementById(id)
+	for (let r = 0; r < rows; r++) {
+		for (let c = 0; c < cols; c++) {
+			let id = r.toString() + '-' + c.toString();
+			let space = document.getElementById(id)
 
-      space.removeEventListener("click", placePiece);
-      space.removeEventListener("mouseover", hoverCol);
-    }
-  }
+			space.removeEventListener("click", placePiece);
+			space.removeEventListener("mouseover", hoverCol);
+		}
+	}
 }
 
 /**
@@ -231,10 +223,10 @@ function checkForWin(row, col) {
  * @return {void}
  */
 function checkDiagonal(row, col) {
-  let [leftDiagStartRow, leftDiagStartCol] = getLeftDiagStart(row,col);
-  let [rightDiagStartRow, rightDiagStartCol] = getRightDiagStart(row,col);
-  checkLeftDiag(leftDiagStartRow, leftDiagStartCol);
-  checkRightDiag(rightDiagStartRow, rightDiagStartCol);
+	let [leftDiagStartRow, leftDiagStartCol] = getLeftDiagStart(row, col);
+	let [rightDiagStartRow, rightDiagStartCol] = getRightDiagStart(row, col);
+	checkLeftDiag(leftDiagStartRow, leftDiagStartCol);
+	checkRightDiag(rightDiagStartRow, rightDiagStartCol);
 }
 /**
  * Checks board for left diagonal win from the coordinates a piece was placed
@@ -250,7 +242,8 @@ function checkLeftDiag(row, col) {
 			if (consecutive >= 4) {
 				gameOver = true;
 				return;
-			}    } else {
+			}
+		} else {
 			consecutive = 0;
 		}
 		row++;
@@ -286,7 +279,7 @@ function checkRightDiag(row, col) {
  * @returns {int[]} - 2 element array with row and col coord of start coord
  */
 function getLeftDiagStart(row, col) {
-	return row <= col ? [0,col-row] : [row-col,0];
+	return row <= col ? [0, col - row] : [row - col, 0];
 }
 /**
  * Gets coordinate of right diagonal to use for iterating over diagonal
@@ -299,7 +292,7 @@ function getRightDiagStart(row, col) {
 		row++;
 		col--;
 	}
-	return [row,col];
+	return [row, col];
 }
 /**
  * Checks board for vertical win from the coordinates a piece was placed
@@ -327,7 +320,7 @@ function checkVertical(col) {
  * @param {int} col - column coord of placed piece
  * @return {void}
  */
-function checkHorizontal(row) {  
+function checkHorizontal(row) {
 	let consecutive = 0;
 	for (let col = 0; col < cols; col++) {
 		if (board[row][col] == currentPlayer) {
@@ -360,7 +353,7 @@ function getCoords(e) {
 	let coord = e.target.id.split('-');
 	let row = parseInt(coord[0]);
 	let col = parseInt(coord[1]);
-	return [row,col];
+	return [row, col];
 }
 
 /**
@@ -368,7 +361,7 @@ function getCoords(e) {
  * @param {Event} e - event object
  */
 function hoverCol(e) {
-	let [row,col] = getCoords(e);
+	let [row, col] = getCoords(e);
 	let column = getCol(col);
 	column.forEach((space) => {
 		if (space) {
@@ -389,7 +382,7 @@ function hoverCol(e) {
  * @param {Event} e - event object
  */
 function unHoverCol(e) {
-	let [row,col] = getCoords(e);
+	let [row, col] = getCoords(e);
 	let column = getCol(col);
 
 	column.forEach((space) => {

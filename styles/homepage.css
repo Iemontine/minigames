@@ -20,8 +20,28 @@ html {
 	overflow: hidden;
 }
 
+header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+header h1 {
+	font-family: 'tron2';
+	font-size: 50px;
+	text-shadow: 0 0 10px rgb(11, 252, 59), 0 0 10px rgb(11, 252, 59);
+	color: white;
+	text-align: center;
+}
+
 .container {
 	position: fixed;
+	top: 50px;
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -52,7 +72,8 @@ html {
 	top: 25px;
 	transform: rotate(20deg) skew(20deg, 25deg);
 }
-.panel1:hover {
+.panel1:hover,
+.panel1:focus {
 	transform: rotate(20deg) skew(20deg, 25deg) translate(-10px, 10px);
 	background-color: #666635;
 }
@@ -65,7 +86,8 @@ html {
 	top: -200px;
 }
 
-.panel2:hover {
+.panel2:hover,
+.panel2:focus {
 	transform: rotate(45deg) translate(-10px, -10px);
 	background-color: #35665B;
 }
@@ -80,7 +102,8 @@ html {
 	top: 25px;
 	transform: rotate(-20deg) skew(-20deg, -25deg);
 }
-.panel3:hover {
+.panel3:hover,
+.panel3:focus {
 	transform: rotate(-20deg) skew(-20deg, -25deg) translate(10px, 10px);
 	background-color: #663D3D;
 }
@@ -115,18 +138,19 @@ html {
 	.panel1 {
 		width: 125px;
 		height: 125px;
-		left: 10px
+		left: 12.5px;
+		top: -60px;
 	}
 	.panel2 {
 		position:absolute;
 		width: 140px;
 		height: 140px;
-
 		top: 140px;
 	}
 	.panel3 {
 		width: 125px;
 		height: 125px;
-		right: 10px;
+		right: 12.5px;
+		top: -60px;
 	}
 }

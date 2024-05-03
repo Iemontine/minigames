@@ -1,13 +1,15 @@
 "use strict";
 
+// Implementation, design, and assets were studied and adapted from open-source https://github.com/0shuvo0/whack-a-mole
+// Adapted from https://www.youtube.com/watch?v=b20YueeXwZg (tutorial video corresponding to the above repository)
 
 document.addEventListener('DOMContentLoaded', function () {
 	const startButton = document.getElementById('startButton');
 	const moles = document.querySelectorAll('.mole');
 	const scoreDisplay = document.getElementById('score');
 	const timeLeftDisplay = document.getElementById('timeLeft');
-	
 
+	// Game variables
 	let gameRunning = false;
 	let gameTimer;
 	let score = 0;
@@ -16,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let peepRate = 1000;
 	let peepLength = 1500;
 
+	// Resets game variables
 	function resetGame() {
 		score = 0;
 		timeLeft = 60;
@@ -23,10 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		gameRunning = true;
 		scoreDisplay.textContent = score;
 		timeLeftDisplay.textContent = timeLeft;
-	}
-
-	function randomTime(min, max) {
-		return Math.round(Math.random() * (max - min) + min);
 	}
 
 	/**
@@ -49,20 +48,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		let molesOut = Math.round(Math.random() * (max_molesOut - 1) + 1);
 
-		for (let i = 0; i < molesOut; i++) {	// Random number of
+		for (let i = 0; i < molesOut; i++) { 	// Random number of moles peep out
 			const mole = randomMole(moles);
 			if (mole.getAttribute("src") == "assets/mole.png") {
-				mole.src = 'assets/mole.png'; // Mole pops out
+				mole.src = 'assets/mole.png'; 	// Mole pops out
 				moveMoleUp(mole);
 				mole.dataset.hit = true;
 			}
 			setTimeout(() => {
-				mole.src = 'assets/mole.png'; // Mole goes back
+				mole.src = 'assets/mole.png'; 	// Mole goes back
 				moveMoleDown(mole);
-				delete mole.dataset.hit; // Reset hit target
+				delete mole.dataset.hit; 		// Reset hit target
 			}, peepLength);
 		}
 
+		// Speed up game as time goes on
 		if (timeLeft < 50) {
 			if (peepLength > 500) {
 				peepLength -= 30;
@@ -72,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}
 		// TODO: variable lengths depending on number of moles that are out?
+
+		// Call peep again after a random time
 		setTimeout(peep, molesOut > 0 ? peepLength + peepRate : peepRate);
 	}
 
@@ -82,26 +84,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		let id = setInterval(frame, 1);
 		function frame() {
 			if (pos === 0) {
-						clearInterval(id);
-					} else {
-						pos++;
-						mole.style.bottom = pos + "px";
-					}
+				clearInterval(id);
+			} else {
+				pos++;
+				mole.style.bottom = pos + "px";
+			}
 		}
 	}
-	// animates mole down
+	// Animates mole down
 	function moveMoleDown(mole) {
 		let pos = 0;
 		clearInterval(null);
 		let id = setInterval(frame, .5);
 		function frame() {
 			if (pos === -55) {
-						clearInterval(id);
-					} else {
-						pos--;
-						mole.style.bottom = pos + "px";
-
-					}
+				clearInterval(id);
+			} else {
+				pos--;
+				mole.style.bottom = pos + "px";
+			}
 		}
 	}
 
@@ -179,11 +180,11 @@ function lightRingRed(mole) {
  * @param {Element} mole 
  */
 function resetLights(mole) {
-		let moleHole = mole.closest(".mole-hole");
-		let frontRing = moleHole.children[0];
-		let backRing = moleHole.children[1];
-		frontRing.classList.remove("greenRing");
-		backRing.classList.remove("greenRing");
-		frontRing.classList.remove("redRing");
-		backRing.classList.remove("redRing");
+	let moleHole = mole.closest(".mole-hole");
+	let frontRing = moleHole.children[0];
+	let backRing = moleHole.children[1];
+	frontRing.classList.remove("greenRing");
+	backRing.classList.remove("greenRing");
+	frontRing.classList.remove("redRing");
+	backRing.classList.remove("redRing");
 }

@@ -1,6 +1,6 @@
 "use strict";
 
-// Open source code adapted from https://codepen.io/mattjroberts/pen/pazNdx
+// Open source code for the "3D" grid background adapted from https://codepen.io/mattjroberts/pen/pazNdx
 
 let canvas = document.querySelector('canvas');
 let c = canvas.getContext('2d');
@@ -15,6 +15,7 @@ window.addEventListener('resize', () => {
 
 let color = "rgba(0, 255, 255,";
 
+// Define class for horizontal lines drawing
 let HorizontalArray = [];
 class Horizontal {
 	constructor(y) {
@@ -44,6 +45,8 @@ class Horizontal {
 	}
 }
 
+
+// Define class for vertical lines drawing
 let grad = c.createLinearGradient(0, canvas.height, 0, 0);
 grad.addColorStop("0", `${color} 0.5)`);
 grad.addColorStop("0.55", `${color} 0)`);
@@ -68,6 +71,7 @@ class Vertical {
 	}
 }
 
+// Create initial lines vertical lines
 let interval = (canvas.width / 10);
 let cross = 0 - interval * 8;
 for (let i = 0; i < 27; i++) {
@@ -75,11 +79,12 @@ for (let i = 0; i < 27; i++) {
 	cross += interval;
 }
 
-// Fixed bug in original source causing lines to build up even when page is unfocused
+// Attempts to fix bug in original source causing lines to build up even when page is unfocused
 let lineSpawner = setInterval(() => {
 	HorizontalArray.push(new Horizontal(canvas.height / 2));
 }, 300);
 
+// Animation loop
 function animate() {
 	requestAnimationFrame(animate);
 	c.clearRect(0, 0, canvas.width, canvas.height);
