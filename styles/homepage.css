@@ -16,7 +16,7 @@ html {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: #242424;
+	background: rgb(12,12,12);
 	overflow: hidden;
 }
 
