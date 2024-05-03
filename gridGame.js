@@ -336,6 +336,18 @@ const checkVictory = () => {
 		showVictoryPopup();
 	}
 };
+const showVictoryPopup = () => {
+	const popup = document.getElementById("popup");
+	popup.style.display = "block";
+	isMoving = true;	// Lock movement until the player closes the popup
+};
+
+const nextLevel = () => {
+	level += 1;
+	setupGame();
+	const popup = document.getElementById("popup");
+	popup.style.display = "none";
+};
 
 // Controls
 let pressUp = false, pressDown = false, pressLeft = false, pressRight = false;
@@ -366,19 +378,6 @@ document.querySelectorAll(".control-btn").forEach((btn) => {
 		}
 	});
 });
-
-const showVictoryPopup = () => {
-	const popup = document.getElementById("popup");
-	popup.style.display = "block";
-	isMoving = true;
-};
-
-const nextLevel = () => {
-	level += 1;
-	setupGame();
-	const popup = document.getElementById("popup");
-	popup.style.display = "none";
-};
 // Restart current level
 
 // Listen for the Main Menu button
