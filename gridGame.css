@@ -1,5 +1,5 @@
 * { /* Global variables */
-  --size: calc(60px); /* TODO: * 5vh */
+  --size: calc(60px); /* TODO: * dynamic sizing for responsiveness */
   --dimension:11;
 }
 
