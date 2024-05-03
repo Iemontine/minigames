@@ -261,12 +261,12 @@ const setupGame = () => {
 		walls = generateBorder(11);
 		// Set the wall sprites
 		wallSprites = fillBorder(10);
-		// Set the block and solution positions
-		blocks = [
-		];
-		solutions = [
-		];
+		// Don't place anything
+		blocks = [];
+		solutions = [];
 		playerPosition = { x: 5, y: 9 };
+
+		document.getElementById("popup2").style.display = "block";
 	}
 
 	// Assign colors to solutions based on corresponding blocks
@@ -532,7 +532,7 @@ const checkVictory = () => {
 		// Pause a bit before showing the popup
 		setTimeout(() => {
 			// Display the level complete popup
-			const popup = document.getElementById("popup");
+			const popup = document.getElementById("popup1");
 			popup.style.display = "block";
 			// Play the level complete sound
 			let audio = new Audio('gridGame/level_complete.mp3');
@@ -544,7 +544,7 @@ const nextLevel = () => {
 	level++;
 
 	// Hide the popup
-	const popup = document.getElementById("popup");
+	const popup = document.getElementById("popup1");
 	popup.style.display = "none";
 
 	// Reset the background image of each cell
@@ -557,7 +557,7 @@ const nextLevel = () => {
 };
 // Listen for the space key to advance to the next level if the popup is currently visible
 document.addEventListener('keydown', (e) => {
-	if (e.key === ' ' && document.getElementById('popup').style.display === 'block') {
+	if (e.key === ' ' && document.getElementById('popup1').style.display === 'block') {
 		nextLevel();
 	}
 });
@@ -594,7 +594,7 @@ document.querySelectorAll(".control-btn").forEach((btn) => {
 
 // Access Controls
 // Listen for the Next Level button
-document.getElementById("popup").addEventListener("click", nextLevel);
+document.getElementById("popup1").addEventListener("click", nextLevel);
 // Listen for the Mute button
 document.getElementById("muteButton").addEventListener("click", () => {
 	if (muted) {

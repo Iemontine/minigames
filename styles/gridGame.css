@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Retro Gaming';
+  src: url(../assets/Retro\ Gaming.ttf);
+}
+
 /* Global variables */
 * {
   --size: calc(61px);
@@ -99,7 +104,7 @@ body, html {
 }
 
 /* Level complete! Popup */
-#popup {
+#popup1 {
 	z-index:100;
 	position: absolute;
 	top: 50%;
@@ -111,11 +116,12 @@ body, html {
 	text-align: center;
 	display: none; /* Initially invisible */
 	outline: 2px solid lime;
+	user-select:none;
 }
-#popup img {
+#popup1 img {
 	width: 700px;
 }
-#popup button {
+#popup1 button {
 	margin-top: 10px;
 	padding: 5px 10px;
 }
@@ -123,6 +129,36 @@ body, html {
 	#popup img {
 		top: 100px;
 		width: 300px;
+	}
+}
+
+/* Thanks for playing! Popup */
+#popup2 {
+	z-index:100;
+	position: absolute;
+	top: 30%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 5px;
+	background: black;
+	color: limegreen;
+	text-align: center;
+	display: none; /* Initially invisible */
+	font-size: 15px;
+	outline: 2px solid lime;
+	user-select:none;
+	
+	font-family: 'Retro Gaming';
+}
+#popup2 img {
+	width: 500px;
+}
+@media (max-width: 800px) {
+	#popup2 {
+		font-size: 12px;
+	}
+	#popup2 img {
+		width: 200px;
 	}
 }
 
