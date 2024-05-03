@@ -118,7 +118,7 @@ footer {
 }
 
 /* Mobile */
-@media (screen) and (max-width: 575px) {
+@media (max-width: 575px) {
 	html, body {
 		display: flex;
 		flex-direction: column;
@@ -163,7 +163,7 @@ footer {
 	}
 }
 /* Medium */
-@media (screen) and (min-width: 900px) {
+@media (min-width: 900px) {
 	html, body {
 		display: flex;
 		flex-direction: column;
@@ -203,7 +203,7 @@ footer {
 	}
 }
 /* Small */
-@media (screen) and (max-width: 900px) and (min-width: 575px) {
+@media (max-width: 900px) and (min-width: 575px) {
 	html, body {
 		display: flex;
 		flex-direction: column;
