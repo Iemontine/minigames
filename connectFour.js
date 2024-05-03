@@ -18,7 +18,10 @@ window.onload = () => {
 	setGame();
 }
 
-// Creates game board
+/**
+ * Creates game board and adds event listeners to spaces
+ * @return {void}
+ */
 function setGame() {
 	board = [];
 
@@ -39,8 +42,10 @@ function setGame() {
   }
   setMessage();
 }
-
-// resets game board
+/**
+ * resets board and game to default parameters
+ * @return {void}
+ */
 function resetGame() {
   board =[];
   colHeight = Array(7).fill(5);
@@ -64,11 +69,15 @@ function resetGame() {
   setMessage();
 }
 
-/* 
-  places piece based on height of column
-  (How many pieces are already placed in column)
+/**
+ * places piece based on height of column
+ * (How many pieces are already placed in column)
+ * @param {Event} e - The event object with information on the column
+ *    a piece was placed
+ * @return {void}
 */
 function placePiece(e) {
+  console.log(typeof(e));
   if (gameOver) {
     endGame();
   }
@@ -95,7 +104,11 @@ function placePiece(e) {
   setMessage();
 }
 
-// Removes all children in a div
+/**
+ * removes all the children inside a parent element
+ * @param {Element} container 
+ * @return {void}
+ */
 function clearDiv(container) {
   while (container.firstChild) {
     container.removeChild(container.firstChild);
@@ -107,10 +120,10 @@ function endGame() {
   promptForGame();
 }
 
-/*
-  Displays end game message and promps if players want
-  to play again
-*/
+/**
+ * Displays end game message and promps if players want to play again
+ * @return {void}
+ */
 function promptForGame() {
   let winnerMessage = "player " + currentPlayer + " wins !"; 
   let messageTab = document.getElementById("messageTab");
@@ -123,7 +136,10 @@ function promptForGame() {
   quitButton.addEventListener("click", quitGame);
 }
 
-// Sets message to tell whos currently playing
+/**
+ * Sets message tab to tell whos currently playing
+ * @return {void}
+ */ 
 function setMessage() {
   let messageContainer = document.getElementById("messageTab");
   clearDiv(messageContainer);
@@ -136,7 +152,12 @@ function quitGame() {
   window.location.href = "index.html";
 }
 
-// adds a div into a container with the given classes
+/**
+ * adds a div into a container with the given classes
+ * @param {Element} container - the parent element 
+ * @param {string[]} classes - list of classes to be added to child div
+ * @return {Element} div - the child element with the classes specified
+ */ 
 function addDiv(container, classes) {
   let div = document.createElement("div");
   classes.forEach(c => {
@@ -146,10 +167,13 @@ function addDiv(container, classes) {
   return div;
 }
 
-/* 
-  Adds a button into a container with given classes
-  returns button element if more manipulation is necessary
-*/
+/**
+ * Adds a button into a container with given classes
+ * @param {string} text - text to be shown in button
+ * @param {Element} container - parent element that button will be added to
+ * @param {string[]} classes - list of classes to be added to button
+ * @return {Element} button - the child button with classes specified
+ */
 function addButton(text, container, classes) {
   let button = document.createElement("button");
   button.innerText = text;
@@ -160,10 +184,13 @@ function addButton(text, container, classes) {
   return button;
 }
 
-/* 
-  Adds p tag into container with contents of message
-  Returns p element if you want to manipulate it
-*/
+/**
+ * Adds p tag into container with contents of message
+ * @param {string} message - message to be added into container
+ * @param {Element} container - parent element message will be added to
+ * @return {Element} messageElement - child p element returned
+ */ 
+ 
 function addMessage(message, container) {
   let messageElement = document.createElement("p");
   let text = document.createTextNode(message);
@@ -172,6 +199,7 @@ function addMessage(message, container) {
   return messageElement;
 }
 
+// removes interactivity of board
 function removeInteractivity() {
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -184,19 +212,37 @@ function removeInteractivity() {
   }
 }
 
+/**
+ * Checks board for horizontal, vertical, diagonal win from the coordinates
+ *    that a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkForWin(row, col) {
 	checkHorizontal(row);
 	checkVertical(col);
 	checkDiagonal(row, col);
 }
 
+/**
+ * Checks board for diagonal win from the coordinates a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkDiagonal(row, col) {
   let [leftDiagStartRow, leftDiagStartCol] = getLeftDiagStart(row,col);
   let [rightDiagStartRow, rightDiagStartCol] = getRightDiagStart(row,col);
   checkLeftDiag(leftDiagStartRow, leftDiagStartCol);
   checkRightDiag(rightDiagStartRow, rightDiagStartCol);
 }
-
+/**
+ * Checks board for left diagonal win from the coordinates a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkLeftDiag(row, col) {
 	let consecutive = 0;
 	while (row <= 5 && col <= 6) {
@@ -212,7 +258,12 @@ function checkLeftDiag(row, col) {
 		col++;
 	}
 }
-
+/**
+ * Checks board for right diagonal win from the coordinates a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkRightDiag(row, col) {
 	let consecutive = 0;
 	while (row >= 0 && col <= 6) {
@@ -229,11 +280,21 @@ function checkRightDiag(row, col) {
 		col++;
 	}
 }
-
+/**
+ * Gets coordinate of left diagonal to use for iterating over diagonal
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @returns {int[]} - 2 element array with row and col coord of start coord
+ */
 function getLeftDiagStart(row, col) {
 	return row <= col ? [0,col-row] : [row-col,0];
 }
-
+/**
+ * Gets coordinate of right diagonal to use for iterating over diagonal
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @returns {int[]} - 2 element array with row and col coord of start coord
+ */
 function getRightDiagStart(row, col) {
 	while (row < 5 && col > 0) {
 		row++;
@@ -241,7 +302,12 @@ function getRightDiagStart(row, col) {
 	}
 	return [row,col];
 }
-
+/**
+ * Checks board for vertical win from the coordinates a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkVertical(col) {
 	let consecutive = 0;
 	for (let row = 0; row < rows; row++) {
@@ -256,7 +322,12 @@ function checkVertical(col) {
 		}
 	}
 }
-
+/**
+ * Checks board for horizontal win from the coordinates a piece was placed
+ * @param {int} row - row coord of placed piece
+ * @param {int} col - column coord of placed piece
+ * @return {void}
+ */
 function checkHorizontal(row) {  
 	let consecutive = 0;
 	for (let col = 0; col < cols; col++) {
@@ -272,12 +343,20 @@ function checkHorizontal(row) {
 	}
 }
 
-// Checks if colun is full
+/**
+ * Checks if a column is full
+ * @param {int} col 
+ * @returns {bool} - whether column is full or not
+ */
 function colFull(col) {
 	return colHeight[col] < 0;
 }
 
-// gets the coords of a piece placement
+/**
+ * Gets the coord of a click on board
+ * @param {Event} e 
+ * @returns {int[]} - 2 element array with coords of click event
+ */
 function getCoords(e) {
 	let coord = e.target.id.split('-');
 	let row = parseInt(coord[0]);
@@ -285,10 +364,10 @@ function getCoords(e) {
 	return [row,col];
 }
 
-/* 
-	Display hover effect for column 
-	Also shows possible location of piece placement
-*/
+/**
+ * Adds hover class to a hovered column
+ * @param {Event} e - event object
+ */
 function hoverCol(e) {
 	let [row,col] = getCoords(e);
 	let column = getCol(col);
@@ -306,9 +385,10 @@ function hoverCol(e) {
 
 }
 
-/*
-	Removes hover effect when mouse moves away from column
-*/
+/**
+ * Removes hover class from a hovered column
+ * @param {Event} e - event object
+ */
 function unHoverCol(e) {
 	let [row,col] = getCoords(e);
 	let column = getCol(col);
@@ -327,7 +407,11 @@ function unHoverCol(e) {
 
 }
 
-// gets all the elements in a column
+/**
+ * Gets all the elements in a column to add effects to
+ * @param {int} col 
+ * @returns {Element[]} column - array of elements in the same column
+ */
 function getCol(col) {
 	let column = [];
 	for (let r = 0; r < rows; r++) {

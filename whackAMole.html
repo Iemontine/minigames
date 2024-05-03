@@ -5,24 +5,54 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Whack-A-Mole Game</title>
-        <link rel="stylesheet" href="whackAMole.css">
+        <link rel="stylesheet" href="styles/whackAMole.css">
     </head>
 
     <body>
+        <header>
+            <h1 id="title"><a href="index.html">MINIGAMES</a></h1>
+        </header>
         <div class="game-container">
-            <div class="info-panel">
-                <div>Score: <span id="score">0</span></div>
-                <div>Time Left: <span id="timeLeft">60</span>s</div>
+            <div class="info-panel text">
+                <div>score: <span id="score">0</span></div>
+                <div>time left: <span id="timeLeft">60</span>s</div>
             </div>
             <div class="mole-grid">
-                <div class="mole-hole"><img src="image1.png" class="mole" alt="Mole"></div>
-                <div class="mole-hole"><img src="image1.png" class="mole" alt="Mole"></div>
-                <div class="mole-hole"><img src="image1.png" class="mole" alt="Mole"></div>
-                <div class="mole-hole"><img src="image1.png" class="mole" alt="Mole"></div>
-                <div class="mole-hole"><img src="image1.png" class="mole" alt="Mole"></div>
-            </div>
-            <button id="startButton" class="start-button">START!</button>
+                <div class="mole-hole">
+                    <div class="frontHole"></div>
+                    <div class="backHole"></div>
+                    <div class="mask"></div>
+                    <img src="assets/mole.png" class="mole" alt="Mole">
+                </div>
+                <div class="mole-hole">
+                    <div class="frontHole"></div>
+                    <div class="backHole"></div>
+                    <div class="mask"></div>
+                    <img src="assets/mole.png" class="mole" alt="Mole">
+                </div>
+                <div class="mole-hole">
+                    <div class="frontHole"></div>
+                    <div class="backHole"></div>
+                    <div class="mask"></div>
+                    <img src="assets/mole.png" class="mole" alt="Mole">
+                </div>                
+                <div class="mole-hole z2">
+                    <div class="frontHole z4"></div>
+                    <div class="backHole z1"></div>
+                    <div class="mask z3"></div>
+                    <img src="assets/mole.png" class="mole z2" alt="Mole">
+                </div>                
+                <div class="mole-hole z2">
+                    <div class="frontHole z4"></div>
+                    <div class="backHole z1"></div>
+                    <div class="mask z3"></div>
+                    <img src="assets/mole.png" class="mole z2" alt="Mole">
+                </div>            </div>
+            <button id="startButton" class="button text">start</button>
         </div>
+        <footer>
+            <p>© 2024 gavin lang, darroll saddi. all rights reserved.</p>
+          </footer>
         <script src="whackAMole.js"></script>
     </body>
 
