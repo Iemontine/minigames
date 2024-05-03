@@ -60,7 +60,7 @@ body, html {
 .cell {
 	width: var(--size);
 	height: var(--size);
-	background-color: rgb(12, 12, 12);
+	background-color: rgb(24, 24, 24);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -133,12 +133,22 @@ body, html {
 	position: absolute;
 	top: 0;
 	right: 20px;
+	user-select: none; /* Prevent text selection to prevent collisions with arrow movement keys */
 }
 #mainMenuButton {
 	position: relative;
 	cursor: pointer;
 	background: url(../gridGame/exit.png) no-repeat center center;
 	background-size: contain;   
+	width: 45px;
+	height: 45px;
+	border: none;
+}
+#muteButton {
+	position: relative;
+	cursor: pointer;
+	background: url(../gridGame/jamming.png) no-repeat center center;
+	background-size: contain;
 	width: 45px;
 	height: 45px;
 	border: none;
@@ -152,15 +162,7 @@ body, html {
 	width: 60px;
 	height: 60px;
 	border: none;
-}
-#muteButton {
-	position: relative;
-	cursor: pointer;
-	background: url(../gridGame/jamming.png) no-repeat center center;
-	background-size: contain;
-	width: 45px;
-	height: 45px;
-	border: none;
+	user-select: none; /* Prevent text selection to prevent collisions with arrow movement keys */
 }
 
 /* Logo */

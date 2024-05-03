@@ -475,16 +475,16 @@ const updateGame = () => {
 				cell.style.boxShadow = `inset 0 0 10px ${block.color}, 0 0 10px ${block.color}`;
 			} else if (solution) {
 				cell.classList.add("solution");
-				cell.style.backgroundColor = "rgb(12, 12, 12)";
+				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = `inset 0 0 20px ${solution.color}, 0 0 20px ${solution.color}`;
 			} else if (walls.has(`${x},${y}`)) {
 				cell.classList.add("wall");
 				cell.style.backgroundColor = "rgb(0, 0, 0)";
 				const wallType = wallSprites.get(`${x},${y}`);
-				cell.style.backgroundSize = "contain";
+				cell.style.backgroundSize = "cover";
 				cell.style.backgroundImage = `url('gridGame/tiles/${wallType}.png')`;
 			} else {
-				cell.style.backgroundColor = "rgb(12, 12, 12)";
+				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = "none";
 			}
 		}
