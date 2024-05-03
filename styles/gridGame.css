@@ -107,7 +107,7 @@ body, html {
 #popup1 {
 	z-index:100;
 	position: absolute;
-	top: 50%;
+	top: 42.5%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	padding: 5px;
@@ -126,7 +126,7 @@ body, html {
 	padding: 5px 10px;
 }
 @media (max-width: 800px) {
-	#popup img {
+	#popup1 img {
 		top: 100px;
 		width: 300px;
 	}
