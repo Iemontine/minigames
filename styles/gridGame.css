@@ -1,125 +1,192 @@
-* { /* Global variables */
-  --size: calc(70px); /* TODO: * 5vh */
+/* Global variables */
+* {
+  --size: calc(61px);
   --dimension:11;
+}
+@media (max-width: 800px) {
+  * {
+	--size: calc(32px);
+  }
 }
 
 body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    background-color: rgb(15, 14, 17);
+	height: 100%;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	background-color: rgb(15, 14, 17);
+	background-image: url('../gridGame/top.png');
+	background-repeat: repeat;
+	background-size: cover;
+	z-index:-2;
 }
 
+/* Grid container */
 #gameGrid {
-    display: grid;
-    grid-template-rows: repeat(var(--dimension), var(--size));
-    grid-template-columns: repeat(var(--dimension), var(--size));
+	display: grid;
+	grid-template-rows: repeat(var(--dimension), var(--size));
+	grid-template-columns: repeat(var(--dimension), var(--size));
+}
+@media (max-width: 800px) {
+	#gameGrid {
+		margin-top: 100px;
+	}
 }
 
+/* Player controls */
 .controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 20px;
 	user-select:none;
 }
-
 .control-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
+	width: 50px;
+	height: 50px;
+	font-size: 24px;
+	background-color: black;
+	color: lime;
+	outline: 2px solid lime;
+}@media (max-width: 800px) {
+	.con
+	.control-btn {
+		width: 40px;
+		height: 40px;
+	}
 }
 
+/* Default cell and sprite */
 .cell {
-    width: var(--size);
-    height: var(--size);
-    background-color: rgb(24, 24, 24);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	width: var(--size);
+	height: var(--size);
+	background-color: rgb(12, 12, 12);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	user-select: none;
 }
-
 .sprite {
-    content: '';
-    position: absolute;
-    width: var(--size); 
-    height: var(--size);
-    background: url('gridGame/idle.gif') no-repeat center center;
-    background-size: cover;
-    image-rendering:pixelated; /* Disable anti-aliasing to prevent sprite blurring */
+	content: '';
+	position: absolute;
+	width: var(--size); 
+	height: var(--size);
+	background: url('../gridGame/idle.gif') no-repeat center center;
+	background-size: cover;
+	image-rendering: pixelated; /* Disable anti-aliasing to prevent sprite blurring */
 }
-    
+
+/* Block Types */
 .wall {
-    background-color: rgb(0, 0, 0);
+	background-color: rgb(0, 0, 0);
+	background-size: cover;   
+	image-rendering: pixelated; /* Disable anti-aliasing to prevent sprite blurring */
 }
-
 .solution {
-    background-color: rgb(0, 0, 0);
+	background-color: rgb(0, 0, 0);
 	border: solid 10px white;
-    width: calc(var(--size)-10px);
-    height:  calc(var(--size)-10px);
-    z-index:2;
+	width: calc(var(--size)-10px);
+	height:  calc(var(--size)-10px);
+	z-index: 2;
 }
-
 .block {
-    background-color: rgb(0, 0, 0);
-    width: calc(var(--size)-10px);
-    height:  calc(var(--size)-10px);
-    z-index:2;
+	background-color: rgb(0, 0, 0);
+	width: calc(var(--size)-10px);
+	height:  calc(var(--size)-10px);
+	transition: transform 300ms ease-out;
+	transform-origin: top left;
+	z-index: 2;
 }
 
 #popup {
-    z-index:100;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background: white;
-    color: black;
-    border-radius: 8px;
-    text-align: center;
-    display:none; /* Initially invisible */
+	z-index:100;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 5px;
+	background: black;
+	color: black;
+	text-align: center;
+	display: none; /* Initially invisible */
+	outline: 2px solid lime;
 }
-
+#popup img {
+	width: 700px;
+}
 #popup button {
-    margin-top: 10px;
-    padding: 5px 10px;
+	margin-top: 10px;
+	padding: 5px 10px;
+}
+@media (max-width: 800px) {
+	#popup img {
+		top: 100px;
+		width: 300px;
+	}
 }
 
-/* Main menu button styles */
+/* Access controls, including exit, mute, restart */
+#accessControls {
+	display: flex;
+	gap: 2px;
+	margin-top: 20px;
+	position: absolute;
+	top: 0;
+	right: 20px;
+}
 #mainMenuButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    background: url('gridGame/exit.png') no-repeat center center;
-    background-size: contain;   
-    width: 40px;
-    height: 40px;
-    border: none;
+	position: relative;
+	cursor: pointer;
+	background: url('../gridGame/exit.png') no-repeat center center;
+	background-size: contain;   
+	width: 45px;
+	height: 45px;
+	border: none;
+}
+#restartButton {
+	position: relative;
+	top:15px;
+	cursor: pointer;
+	background: url('../gridGame/restart.png') no-repeat center center;
+	background-size: contain;
+	width: 60px;
+	height: 60px;
+	border: none;
+}
+#muteButton {
+	position: relative;
+	cursor: pointer;
+	background: url('../gridGame/jamming.png') no-repeat center center;
+	background-size: contain;
+	width: 45px;
+	height: 45px;
+	border: none;
 }
 
-/* Header styles */
-header {
-    position: absolute;
-    top: 10px;
-    width: 100%;
-    text-align: center;
-    color: white;
+/* Logo */
+header img {
+	position: absolute;
+	top: 70px;
+	height: 200px;
+	left: 50px;
+	z-index:-1;
+}
+@media (max-width: 1200px) {
+	header img {
+		top: 10px;
+		height: 100px;
+		left: 10px;
+	}
 }
 
 /* Restart text */
 #restartText {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color: white;
+	position: absolute;
+	bottom: 10px;
+	width: 100%;
+	text-align: center;
+	color: white;
 }

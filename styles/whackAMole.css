@@ -1,11 +1,11 @@
 @font-face {
   font-family: tron;
-  src: url(./assets/Tr2n.ttf);
+  src: url(../assets/Tr2n.ttf);
 }
 
 @font-face {
   font-family: tron2;
-  src: url(./assets/Tron-JOAa.ttf);
+  src: url(../assets/Tron-JOAa.ttf);
 }
 
 body,

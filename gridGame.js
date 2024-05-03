@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		grid.appendChild(cell);
 	}
 
+	// Start playing site music
 	site_music = new Audio('/gridGame/devmusic.mp3');
 	site_music.loop = true;
 	const promise = site_music.play();
@@ -28,19 +29,46 @@ document.addEventListener("DOMContentLoaded", () => {
 	setupGame();
 });
 
+// Used for resizing the game grid to account for larger puzzles
+function setGridSize(dimensions, cellSize) {
+	// Set grid size to 13x13 to allow for the larger puzzle and for the border walls
+	if (window.innerWidth < 800) {
+		cellSize = cellSize / 2;
+	} else {
+		cellSize = cellSize; // Set the default cellSize for desktop resolution
+	}
+	gridSize = dimensions;
+	document.documentElement.style.setProperty('--dimension', dimensions.toString());
+	document.documentElement.style.setProperty('--size', cellSize.toString() + 'px');
+	const grid = document.getElementById("gameGrid");
+	grid.innerHTML = '';
+	for (let i = 0; i < dimensions * dimensions; i++) {
+		const cell = document.createElement("div");
+		cell.classList.add("cell");
+		grid.appendChild(cell);
+	}
+	const gameGrid = document.getElementById("gameGrid");
+	gameGrid.style.gridTemplateRows = `repeat(${dimensions}, ${cellSize}px)`;
+	gameGrid.style.gridTemplateColumns = `repeat(${dimensions}, ${cellSize}px)`;
+}
+
 /**
  * Generates the game grid, initializes game variables based on the current level setup.
  * This function is called when the DOM content is loaded.
  */
 const setupGame = () => {
 	function generateColor(i) {
-		return ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FF5000', '#FF0050', '#50FF00', '#00FF50', '#5000FF', '#0050FF', '#FF50FF'][i];
+		return ['#FF0000', '#00FF00', '#0000FF',
+			'#FFFF00', '#FF00FF', '#00FFFF',
+			'#FF5000', '#FF0050', '#50FF00',
+			'#00FF50', '#5000FF', '#0050FF',
+			'#FF50FF'][i];
 	}
 	function generateBorder(size) {
 		walls = new Set();
 		for (let row = 0; row < size; row++) {
 			for (let col = 0; col < size; col++) {
-				if (row < 1 || row > size - 2 || col < 1 || col > size-2) {
+				if (row < 1 || row > size - 2 || col < 1 || col > size - 2) {
 					walls.add(`${row},${col}`);
 				}
 			}
@@ -50,35 +78,37 @@ const setupGame = () => {
 	function fillBorder(size) {
 		let spriteMap = new Map();
 		spriteMap.set('0,0', 'left1');
-		for (let i = 1; i < size; i++) {
-			spriteMap.set(`${i},0`, `mid${Math.floor(Math.random() * 6 + 1)}`);
-		}
 		spriteMap.set(`${size},0`, 'right');
-		for (let i = 1; i < size; i++) spriteMap.set(`0,${i}`, 'top');
-		for (let i = 1; i < size; i++) spriteMap.set(`${size},${i}`, 'top');
 		spriteMap.set(`0,${size}`, 'left1');
-		for (let i = 1; i < size; i++) {
-			spriteMap.set(`${i},${size}`, `mid${Math.floor(Math.random() * 6 + 1)}`);
-		}
 		spriteMap.set(`${size},${size}`, 'right');
+
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`${i},0`, `mid${Math.floor(Math.random() * 6 + 1)}`);
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`0,${i}`, 'top');
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`${size},${i}`, 'top');
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`${i},${size}`, `mid${Math.floor(Math.random() * 6 + 1)}`);
+
 		return spriteMap;
 	}
-	function fillWalls(wallSprites) {
+	function fillWalls(size) {
 		let spriteMap = new Map();
 		spriteMap.set('0,0', 'wall_top_left_corner');
-		for (let i = 1; i <= 9; i++) {
+		spriteMap.set(`0,${size}`, 'wall_bottom_left_corner');
+		spriteMap.set(`${size},${size}`, 'wall_bottom_right_corner');
+		spriteMap.set(`${size},0`, 'wall_top_right_corner');
+		
+		for (let i = 1; i < size; i++)
 			spriteMap.set(`${i},0`, `mid${Math.floor(Math.random() * 6 + 1)}`);
-		}
-		spriteMap.set('10,0', 'wall_top_right_corner');
-		for (let i = 1; i < 10; i++) spriteMap.set(`0,${i}`, 'wall_left');
-		for (let i = 1; i < 10; i++) spriteMap.set(`10,${i}`, 'wall_right');
-		spriteMap.set('0,10', 'wall_bottom_left_corner');
-		for (let i = 1; i <= 9; i++) {
-			spriteMap.set(`${i},10`, 'wall_bottom');
-		}
-		spriteMap.set('10,10', 'wall_bottom_right_corner');
-		spriteMap.set('2,6', 'fill');
-		spriteMap.set('8,6', 'fill');
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`0,${i}`, 'wall_left');
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`${size},${i}`, 'wall_right');
+		for (let i = 1; i < size; i++)
+			spriteMap.set(`${i},${size}`, 'wall_bottom');
+
 		return spriteMap;
 	}
 
@@ -89,6 +119,8 @@ const setupGame = () => {
 
 		// Set the wall sprites
 		wallSprites = fillBorder(10);
+		wallSprites.set('2,6', 'fill');
+		wallSprites.set('8,6', 'fill');
 
 		// Set the block and solution positions
 		blocks = [
@@ -107,10 +139,9 @@ const setupGame = () => {
 		walls = new Set([...walls, '4,8', '2,9']);
 
 		// Generate the wall sprites
-		wallSprites = fillWalls(wallSprites);
+		wallSprites = fillWalls(10);
 		wallSprites.set('4,8', 'full');
 		wallSprites.set('2,9', 'full');
-		
 
 		// Set the block and solution positions
 		blocks = [
@@ -150,54 +181,7 @@ const setupGame = () => {
 		playerPosition = { x: 1, y: 1 };
 	}
 	else if (level === 4) {
-		// Set the wall positions
-		walls = generateBorder(11);
-		walls = new Set([...walls, '4,1', '5,1', '6,1', '7,1', '3,2', '4,2', '5,2', '6,2', '7,2', '8,2', '2,3', '3,3', '4,3', '5,3', '6,3', '7,3', '8,3', '3,4', '5,4']);
-
-		// Set the wall sprites
-		wallSprites = fillBorder(10);
-
-		// Set the block and solution positions
-		blocks = [
-			{ x: 6, y: 5, color: generateColor(0) },
-			{ x: 4, y: 6, color: generateColor(1) },
-			{ x: 2, y: 7, color: generateColor(2) },
-			{ x: 3, y: 8, color: generateColor(3) },
-			{ x: 8, y: 8, color: generateColor(10) },
-			{ x: 8, y: 7, color: generateColor(5) },
-		];
-		solutions = [
-			{ x: 5, y: 7 },
-			{ x: 3, y: 6 },
-			{ x: 3, y: 7 },
-			{ x: 5, y: 8 },
-			{ x: 6, y: 4 },
-			{ x: 7, y: 5 },
-		];
-		playerPosition = { x: 5, y: 9 };
-	}
-	else if (level === 5) {
-		// Set grid size to 13x13 to allow for the larger puzzle of level 5 and for the border walls
-		const newGridSize = 13;
-		let cellSize;
-		if (window.innerWidth < 800) {
-			cellSize = 27;
-		} else {
-			cellSize = 58; // Set the default cellSize for desktop resolution
-		}
-		gridSize = newGridSize;
-		document.documentElement.style.setProperty('--dimension', newGridSize.toString());
-		document.documentElement.style.setProperty('--size', cellSize.toString() + 'px');
-		const grid = document.getElementById("gameGrid");
-		grid.innerHTML = '';
-		for (let i = 0; i < newGridSize * newGridSize; i++) {
-			const cell = document.createElement("div");
-			cell.classList.add("cell");
-			grid.appendChild(cell);
-		}
-		const gameGrid = document.getElementById("gameGrid");
-		gameGrid.style.gridTemplateRows = `repeat(${newGridSize}, ${cellSize}px)`;
-		gameGrid.style.gridTemplateColumns = `repeat(${newGridSize}, ${cellSize}px)`;
+		setGridSize(13, 57); // Resize the grid to 13x13
 
 		// Set the wall positions
 		walls = generateBorder(13);
@@ -205,7 +189,7 @@ const setupGame = () => {
 		walls = new Set([...walls, '9,1', '10,1', '10,5', '2,5', '5,5', '7,5', '6,6', '6,7']);
 
 		// Generate the wall sprites
-		wallSprites = fillBorder(12);
+		wallSprites = fillWalls(12);
 		wallSprites.set('9,1', 'full');
 		wallSprites.set('10,1', 'full');
 		wallSprites.set('10,5', 'full');
@@ -241,6 +225,34 @@ const setupGame = () => {
 			{ x: 5, y: 6 },
 		];
 		playerPosition = { x: 6, y: 9 };
+	}
+	else if (level === 5) {
+		setGridSize(11, 60); // Resize the grid to 13x13
+		// Set the wall positions
+		walls = generateBorder(11);
+		walls = new Set([...walls, '4,1', '5,1', '6,1', '7,1', '3,2', '4,2', '5,2', '6,2', '7,2', '8,2', '2,3', '3,3', '4,3', '5,3', '6,3', '7,3', '8,3', '3,4', '5,4']);
+
+		// Set the wall sprites
+		wallSprites = fillBorder(10);
+
+		// Set the block and solution positions
+		blocks = [
+			{ x: 6, y: 5, color: generateColor(0) },
+			{ x: 4, y: 6, color: generateColor(1) },
+			{ x: 8, y: 7, color: generateColor(2) },
+			{ x: 8, y: 8, color: generateColor(3) },
+			{ x: 3, y: 8, color: generateColor(10) },
+			{ x: 2, y: 7, color: generateColor(5) },
+		];
+		solutions = [
+			{ x: 5, y: 7 },
+			{ x: 7, y: 5 },
+			{ x: 7, y: 6 },
+			{ x: 5, y: 8 },
+			{ x: 3, y: 6 },
+			{ x: 3, y: 7 },
+		];
+		playerPosition = { x: 5, y: 9 };
 	}
 
 	// Assign colors to solutions based on corresponding blocks
@@ -469,7 +481,7 @@ const updateGame = () => {
 				cell.classList.add("wall");
 				cell.style.backgroundColor = "rgb(0, 0, 0)";
 				const wallType = wallSprites.get(`${x},${y}`);
-				cell.style.backgroundSize = "cover";
+				cell.style.backgroundSize = "contain";
 				cell.style.backgroundImage = `url('gridGame/tiles/${wallType}.png')`;
 			} else {
 				cell.style.backgroundColor = "rgb(12, 12, 12)";
