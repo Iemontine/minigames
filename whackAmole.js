@@ -29,6 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		return Math.round(Math.random() * (max - min) + min);
 	}
 
+	/**
+	 * Gets a random mole 
+	 * @param {Element[]} moles - list of mole elements
+	 * @returns {Element} mole - single mole element
+	 */
 	function randomMole(moles) {
 		const idx = Math.floor(Math.random() * moles.length);
 		const mole = moles[idx];
@@ -38,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		return mole;
 	}
 
+	// makes random mole(s) peep out of mole hole.
 	function peep() {
 		if (!gameRunning) return;
 
@@ -71,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		setTimeout(peep, molesOut > 0 ? peepLength + peepRate : peepRate);
 	}
 
+	// Animates mole up
 	function moveMoleUp(mole) {
 		let pos = -55;
 		clearInterval(null);
@@ -84,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					}
 		}
 	}
-
+	// animates mole down
 	function moveMoleDown(mole) {
 		let pos = 0;
 		clearInterval(null);
@@ -147,6 +154,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	startButton.addEventListener('click', startGame);
 });
 
+/**
+ * sets the ring around a mole green
+ * @param {Element} mole 
+ */
 function lightRingGreen(mole) {
 	let moleHole = mole.closest(".mole-hole");
 	let frontRing = moleHole.children[0];
@@ -154,7 +165,10 @@ function lightRingGreen(mole) {
 	frontRing.classList.add("greenRing");
 	backRing.classList.add("greenRing");
 }
-
+/**
+ * sets the ring around a mole red
+ * @param {Element} mole 
+ */
 function lightRingRed(mole) {
 	let moleHole = mole.closest(".mole-hole");
 	let frontRing = moleHole.children[0];
@@ -163,6 +177,10 @@ function lightRingRed(mole) {
 	backRing.classList.add("redRing");
 }
 
+/**
+ * sets the ring around a mole white
+ * @param {Element} mole 
+ */
 function resetLights(mole) {
 		let moleHole = mole.closest(".mole-hole");
 		let frontRing = moleHole.children[0];
