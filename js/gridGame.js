@@ -37,6 +37,9 @@ function setGridSize(dimensions, cellSize) {
 	} else {
 		cellSize = cellSize; // Set the default cellSize for desktop resolution
 	}
+	const gameGrid = document.getElementById("gameGrid");
+	gameGrid.style.gridTemplateRows = `repeat(${dimensions}, ${cellSize}px)`;
+	gameGrid.style.gridTemplateColumns = `repeat(${dimensions}, ${cellSize}px)`;
 	gridSize = dimensions;
 	document.documentElement.style.setProperty('--dimension', dimensions.toString());
 	document.documentElement.style.setProperty('--size', cellSize.toString() + 'px');
@@ -47,9 +50,6 @@ function setGridSize(dimensions, cellSize) {
 		cell.classList.add("cell");
 		grid.appendChild(cell);
 	}
-	const gameGrid = document.getElementById("gameGrid");
-	gameGrid.style.gridTemplateRows = `repeat(${dimensions}, ${cellSize}px)`;
-	gameGrid.style.gridTemplateColumns = `repeat(${dimensions}, ${cellSize}px)`;
 }
 
 /**
@@ -112,6 +112,7 @@ const setupGame = () => {
 		return spriteMap;
 	}
 
+	// Setup the grid based on the current level
 	if (level === 1) {
 		// Set the wall positions
 		walls = generateBorder(11);
@@ -181,8 +182,8 @@ const setupGame = () => {
 		playerPosition = { x: 1, y: 1 };
 	}
 	else if (level === 4) {
-		setGridSize(13, 57); // Resize the grid to 13x13
-
+		// Resize the grid to 13x13
+		setGridSize(13, 57); 
 		// Set the wall positions
 		walls = generateBorder(13);
 		// Append to the border walls
@@ -227,7 +228,8 @@ const setupGame = () => {
 		playerPosition = { x: 6, y: 9 };
 	}
 	else if (level === 5) {
-		setGridSize(11, 60); // Resize the grid to 13x13
+		// Resize the grid back to 11x11
+		setGridSize(11, 60); 
 		// Set the wall positions
 		walls = generateBorder(11);
 		walls = new Set([...walls, '4,1', '5,1', '6,1', '7,1', '3,2', '4,2', '5,2', '6,2', '7,2', '8,2', '2,3', '3,3', '4,3', '5,3', '6,3', '7,3', '8,3', '3,4', '5,4']);
@@ -254,6 +256,18 @@ const setupGame = () => {
 		];
 		playerPosition = { x: 5, y: 9 };
 	}
+	else if (level === 6) {
+		// Set the wall positions
+		walls = generateBorder(11);
+		// Set the wall sprites
+		wallSprites = fillBorder(10);
+		// Set the block and solution positions
+		blocks = [
+		];
+		solutions = [
+		];
+		playerPosition = { x: 5, y: 9 };
+	}
 
 	// Assign colors to solutions based on corresponding blocks
 	solutions.forEach((solution, index) => {
@@ -263,23 +277,28 @@ const setupGame = () => {
 	isMoving = false; 	// Reenable movement between levels
 };
 
-// Functions for handling player and block movement
-const inWall = (position) => {
-	return blocks.some((block) => position.x === block.x && position.y === block.y);
-};
-const inSolution = (position) => {
-	return solutions.some((solution) => position.x === solution.x && position.y === solution.y) && !blocks.some((block) => position.x === block.x && position.y === block.y);
-};
-const inBounds = (position) => {
-	return (position.x >= 0
-		&& position.x < gridSize
-		&& position.y >= 0
-		&& position.y < gridSize
-		&& !walls.has(`${position.x},${position.y}`)
-	);
-};
+/**
+ * Moves the player in the game grid based on the given direction values.
+ * Also handles block movement and collision detection.
+ */
 const movePlayer = (dx, dy) => {
+	// Functions for handling player and block movement
+	function inWall(position) {
+		return blocks.some((block) => position.x === block.x && position.y === block.y);
+	};
+	function inSolution(position) {
+		return solutions.some((solution) => position.x === solution.x && position.y === solution.y)
+			&& !blocks.some((block) => position.x === block.x && position.y === block.y);
+	};
+	function inBounds(position) {
+		return (position.x >= 0 && position.x < gridSize
+			&& position.y >= 0 && position.y < gridSize
+			&& !walls.has(`${position.x},${position.y}`));	// Position is not in a wall
+	};
+
+	// Do not allow movement if the player is already moving or movement is disabled
 	if (isMoving) return;
+
 	// Calculate the new position based on the player's movement
 	const oldPlayerPosition = { x: playerPosition.x, y: playerPosition.y }
 	const newPosition = { x: playerPosition.x + dx, y: playerPosition.y + dy };
@@ -300,6 +319,8 @@ const movePlayer = (dx, dy) => {
 			if (newPosition.x === block.x && newPosition.y === block.y) {
 				const oldBlockPositionX = block.x;
 				const oldBlockPositionY = block.y;
+				
+				// Calculate the new block position based on the player's movement
 				let blockMoved = false;
 				let newBlockPosition = { x: block.x + dx, y: block.y + dy };
 				while (inBounds(newBlockPosition) && !inWall(newBlockPosition) && !inSolution(newBlockPosition)
@@ -326,6 +347,7 @@ const movePlayer = (dx, dy) => {
 					};
 				}
 
+				// Animate the hit effect if the block was moved
 				if (blockMoved) {
 					const oldBlockIndex = oldBlockPositionY * gridSize + oldBlockPositionX;
 					const oldBlockCell = document.querySelectorAll(".cell")[oldBlockIndex];
@@ -374,6 +396,7 @@ const movePlayer = (dx, dy) => {
 // Keep track of the player's movement direction
 let direction;
 let lastDirection = 1;
+
 // Handle player movement + hit animations/effects
 const animatePlayerMovement = (dx, dy, callback) => {
 	direction = dx;
@@ -381,12 +404,13 @@ const animatePlayerMovement = (dx, dy, callback) => {
 	if (sprite) {
 		const translation = `translate(${dx}px, ${dy}px)`;
 
-
+		// Smoothly animate the player's sprite position
 		sprite.style.transition = "transform 100ms ease-in";
 		sprite.style.transform = translation;
 		sprite.style.background = `url('gridGame/move.png') no-repeat center center`;
 		sprite.style.backgroundSize = "cover";
 
+		// Adjust sprite horizontal flip based on direction moved
 		if (dx > 0) {
 			sprite.style.transform += " scaleX(-1)";
 			lastDirection = -1;
@@ -397,6 +421,7 @@ const animatePlayerMovement = (dx, dy, callback) => {
 			sprite.style.transform += ` scaleX(${lastDirection})`;
 		}
 
+		// Reset the sprite's position and animation after the movement
 		setTimeout(() => {
 			sprite.style.transition = "";
 			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
@@ -408,7 +433,7 @@ const animatePlayerMovement = (dx, dy, callback) => {
 const animatePlayerHit = (blockMoved, direction, callback) => {
 	const sprite = document.querySelector(".player .sprite");
 	if (sprite) {
-		// Adjust sprite scale based on direction hit
+		// Adjust sprite horizontal flip based on direction moved
 		if (direction > 0) {
 			sprite.style.transform = "scaleX(-1)";
 			lastDirection = -1;
@@ -417,10 +442,11 @@ const animatePlayerHit = (blockMoved, direction, callback) => {
 			lastDirection = 1;
 		}
 
-		// Replace the sprite with a gif, ensuring the gif is restarted
+		// Replace the player sprite with the hitting animation, ensuring the gif is restarted
 		sprite.style.background = `url('gridGame/hit.gif?${new Date().getTime()}') no-repeat center center`;
 		sprite.style.backgroundSize = "cover";
 
+		// Play the hit sound effect
 		let audio;
 		if (blockMoved) {
 			audio = new Audio("gridGame/hit.wav");
@@ -430,6 +456,7 @@ const animatePlayerHit = (blockMoved, direction, callback) => {
 		}
 		audio.play();
 
+		// Reset the sprite's position and animation after the hit
 		setTimeout(() => {
 			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
 			sprite.style.backgroundSize = "cover";
@@ -447,7 +474,7 @@ const updateGame = () => {
 		cell.innerHTML = "";
 		cell.className = "cell";
 
-		if (x === playerPosition.x && y === playerPosition.y) {
+		if (x === playerPosition.x && y === playerPosition.y) { // Render the player sprite
 			cell.classList.add("player");
 			const spriteDiv = document.createElement("div");
 			spriteDiv.classList.add("sprite");
@@ -460,30 +487,30 @@ const updateGame = () => {
 				spriteDiv.style.transform = `scaleX(${lastDirection})`; // Maintain previous direction if not moving horizontally
 			}
 			cell.appendChild(spriteDiv);
-		} else {
+		} else { // Render the other cell types
 			const block = blocks.find((block) => block.x === x && block.y === y);
 			const solution = solutions.find(
 				(solution) => solution.x === x && solution.y === y
 			);
-			if (block && solution) {
+			if (block && solution) { 				// Render the block and solution if in the same position
 				cell.classList.add("solution");
 				cell.style.backgroundColor = block.color;
 				cell.style.boxShadow = `inset 0 0 10px ${solution.color}, 0 0 10px ${solution.color}`;
-			} else if (block) {
+			} else if (block) {						// Render the block
 				cell.classList.add("block");
 				cell.style.backgroundColor = block.color;
 				cell.style.boxShadow = `inset 0 0 10px ${block.color}, 0 0 10px ${block.color}`;
-			} else if (solution) {
+			} else if (solution) {					// Render the solution cell
 				cell.classList.add("solution");
 				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = `inset 0 0 20px ${solution.color}, 0 0 20px ${solution.color}`;
-			} else if (walls.has(`${x},${y}`)) {
+			} else if (walls.has(`${x},${y}`)) { 	// Render the wall cell
 				cell.classList.add("wall");
 				cell.style.backgroundColor = "rgb(0, 0, 0)";
 				const wallType = wallSprites.get(`${x},${y}`);
 				cell.style.backgroundSize = "cover";
 				cell.style.backgroundImage = `url('gridGame/tiles/${wallType}.png')`;
-			} else {
+			} else {								// Render the empty cell
 				cell.style.backgroundColor = "rgb(24, 24, 24)";
 				cell.style.boxShadow = "none";
 			}
@@ -493,13 +520,15 @@ const updateGame = () => {
 };
 
 const checkVictory = () => {
+	// Check if all blocks are in their corresponding solutions
 	const allSolved = blocks.every(
 		(block, index) =>
 			block.x === solutions[index].x && block.y === solutions[index].y
 	);
+
 	if (allSolved && blocks.length > 0 && solutions.length > 0) {
 		isMoving = true;	// Lock movement until the player closes the popup
-
+		
 		// Pause a bit before showing the popup
 		setTimeout(() => {
 			// Display the level complete popup
@@ -512,17 +541,21 @@ const checkVictory = () => {
 	}
 };
 const nextLevel = () => {
-	level += 1;
+	level++;
 
+	// Hide the popup
 	const popup = document.getElementById("popup");
 	popup.style.display = "none";
 
+	// Reset the background image of each cell
 	document.querySelectorAll(".cell").forEach((cell, i) => {
 		cell.style.backgroundImage = "";
 	});
-	// Reset the background image of each cell
+
+	// Go to the next level
 	setupGame();
 };
+// Listen for the space key to advance to the next level if the popup is currently visible
 document.addEventListener('keydown', (e) => {
 	if (e.key === ' ' && document.getElementById('popup').style.display === 'block') {
 		nextLevel();
@@ -592,6 +625,7 @@ document.getElementById("restartButton").addEventListener("click", (e) => {
 		setupGame(); // Resets the current level
 	}
 });
+// Undocumented/unhinted restart keybind
 document.addEventListener("keydown", (e) => {
 	if (e.key === "r" || e.key === "R") {
 		setupGame(); // Resets the current level
