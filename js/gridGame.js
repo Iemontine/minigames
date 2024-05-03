@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Start playing site music
-	site_music = new Audio('/gridGame/devmusic.mp3');
+	site_music = new Audio('/../gridGame/devmusic.mp3');
 	site_music.loop = true;
 	const promise = site_music.play();
 
@@ -330,7 +330,7 @@ const movePlayer = (dx, dy) => {
 					const oldBlockIndex = oldBlockPositionY * gridSize + oldBlockPositionX;
 					const oldBlockCell = document.querySelectorAll(".cell")[oldBlockIndex];
 					setTimeout(() => {
-						oldBlockCell.style.backgroundImage = `url('gridGame/block_hit.gif?${new Date().getTime()} no-repeat center center')`;
+						oldBlockCell.style.backgroundImage = `url('../gridGame/block_hit.gif?${new Date().getTime()} no-repeat center center')`;
 						oldBlockCell.style.backgroundSize = "cover";
 					}, 200);
 					setTimeout(() => {
@@ -355,7 +355,7 @@ const movePlayer = (dx, dy) => {
 			const cells = document.querySelectorAll(".cell");
 			const oldPlayerCell = cells[oldPlayerIndex];
 			setTimeout(() => {
-				oldPlayerCell.style.backgroundImage = `url('gridGame/dash.gif?${new Date().getTime()}')`;
+				oldPlayerCell.style.backgroundImage = `url('../gridGame/dash.gif?${new Date().getTime()}')`;
 				oldPlayerCell.style.backgroundSize = "cover";
 			}, 100);
 			setTimeout(() => {
@@ -384,7 +384,7 @@ const animatePlayerMovement = (dx, dy, callback) => {
 
 		sprite.style.transition = "transform 100ms ease-in";
 		sprite.style.transform = translation;
-		sprite.style.background = `url('gridGame/move.png') no-repeat center center`;
+		sprite.style.background = `url('../gridGame/move.png') no-repeat center center`;
 		sprite.style.backgroundSize = "cover";
 
 		if (dx > 0) {
@@ -399,7 +399,7 @@ const animatePlayerMovement = (dx, dy, callback) => {
 
 		setTimeout(() => {
 			sprite.style.transition = "";
-			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
+			sprite.style.background = "url('../gridGame/idle.gif') no-repeat center center";
 			sprite.style.backgroundSize = "cover";
 			callback();
 		}, 100);
@@ -418,20 +418,20 @@ const animatePlayerHit = (blockMoved, direction, callback) => {
 		}
 
 		// Replace the sprite with a gif, ensuring the gif is restarted
-		sprite.style.background = `url('gridGame/hit.gif?${new Date().getTime()}') no-repeat center center`;
+		sprite.style.background = `url('../gridGame/hit.gif?${new Date().getTime()}') no-repeat center center`;
 		sprite.style.backgroundSize = "cover";
 
 		let audio;
 		if (blockMoved) {
-			audio = new Audio("/gridGame/hit.wav");
+			audio = new Audio("/../gridGame/hit.wav");
 		}
 		else {
-			audio = new Audio("/gridGame/bump.wav");
+			audio = new Audio("/../gridGame/bump.wav");
 		}
 		audio.play();
 
 		setTimeout(() => {
-			sprite.style.background = "url('gridGame/idle.gif') no-repeat center center";
+			sprite.style.background = "url('../gridGame/idle.gif') no-repeat center center";
 			sprite.style.backgroundSize = "cover";
 			callback();
 		}, 200);
@@ -482,7 +482,7 @@ const updateGame = () => {
 				cell.style.backgroundColor = "rgb(0, 0, 0)";
 				const wallType = wallSprites.get(`${x},${y}`);
 				cell.style.backgroundSize = "contain";
-				cell.style.backgroundImage = `url('gridGame/tiles/${wallType}.png')`;
+				cell.style.backgroundImage = `url('../gridGame/tiles/${wallType}.png')`;
 			} else {
 				cell.style.backgroundColor = "rgb(12, 12, 12)";
 				cell.style.boxShadow = "none";
@@ -506,7 +506,7 @@ const checkVictory = () => {
 			const popup = document.getElementById("popup");
 			popup.style.display = "block";
 			// Play the level complete sound
-			let audio = new Audio('gridGame/level_complete.mp3');
+			let audio = new Audio('../gridGame/level_complete.mp3');
 			audio.play();
 		}, 750);
 	}
@@ -568,7 +568,7 @@ document.getElementById("muteButton").addEventListener("click", () => {
 	if (muted) {
 		site_music.play();
 		let musicButton = document.getElementById("muteButton");
-		musicButton.style.background = "url('gridGame/jamming.png') no-repeat center center";
+		musicButton.style.background = "url('../gridGame/jamming.png') no-repeat center center";
 		musicButton.style.backgroundSize = "contain";
 		musicButton.style.width = "45px";
 		musicButton.style.height = "45px";
@@ -576,7 +576,7 @@ document.getElementById("muteButton").addEventListener("click", () => {
 	} else {
 		site_music.pause();
 		let musicButton = document.getElementById("muteButton");
-		musicButton.style.background = "url('gridGame/snoozing.png') no-repeat center center";
+		musicButton.style.background = "url('../gridGame/snoozing.png') no-repeat center center";
 		musicButton.style.backgroundSize = "contain";
 		musicButton.style.width = "45px";
 		musicButton.style.height = "45px";
