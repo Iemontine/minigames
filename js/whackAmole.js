@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (timeLeft == 0) {
 				clearInterval(countdownTimer);
 				gameRunning = false;
-				alert(`${score}`);
+				alert(`Your score was ${score}!`);
 				startButton.style.display = 'block';
 				startButton.style.opacity = 1;
 				startButton.style.transform = "scale(1)";
