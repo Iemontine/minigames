@@ -508,7 +508,7 @@ const checkVictory = () => {
 			// Play the level complete sound
 			let audio = new Audio('gridGame/level_complete.mp3');
 			audio.play();
-		}, 750);
+		}, 1000);
 	}
 };
 const nextLevel = () => {
