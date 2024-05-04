@@ -15,4 +15,4 @@
 
 ## Other credits
 * Main menu navigation design by Iemontine
-* Effects and styling in Connect 4 & Whack-a-Mole by Gavin
+* Responsiveness and styling in Connect 4 & Whack-a-Mole by Gavin
