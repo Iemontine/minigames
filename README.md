@@ -1,4 +1,6 @@
 ﻿# minigames
+## Homepage
+![Homepage preview](https://github.com/Iemontine/minigames/assets/95956143/ade67cd1-ebf1-437c-83d9-adf29631b3ad)
 
 ## Grid Game
 * Code by Iemontine
