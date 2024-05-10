@@ -1,5 +1,5 @@
 ## Homepage
-![Homepage preview](https://github.com/Iemontine/minigames/assets/95956143/ade67cd1-ebf1-437c-83d9-adf29631b3ad)
+![Homepage preview](https://github.com/Iemontine/minigames/assets/95956143/85a3a6c8-b8bd-4102-973f-57de32cd33aa)
 
 ## Grid Game
 * Code by Iemontine
