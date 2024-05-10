@@ -4,8 +4,8 @@
 
 ## Grid Game
 ![Animation Preview](https://github.com/Iemontine/minigames/assets/95956143/09034916-569c-4b94-b0a8-8ca51d35ee54)
-<img src="https://github.com/Iemontine/minigames/assets/95956143/63d34524-cf6c-4603-ac1e-48e203f6aa35" alt="Gameplay Preview 1" width="500"/>
-<img src="https://github.com/Iemontine/minigames/assets/95956143/bc8cab51-0b64-43a2-8be9-607d28e2ee00" alt="Gameplay Preview 2" width="500"/>
+<img src="https://github.com/Iemontine/minigames/assets/95956143/63d34524-cf6c-4603-ac1e-48e203f6aa35" alt="Gameplay Preview 1" width="400"/>
+<img src="https://github.com/Iemontine/minigames/assets/95956143/bc8cab51-0b64-43a2-8be9-607d28e2ee00" alt="Gameplay Preview 2" width="400"/>
 * Implemented by Iemontine
 * Tile sprites and character sprites by [woopco](https://www.youtube.com/@sliem2749)
 * "the song that plays in grid game idk" by [AnAutumnBreeze](https://www.youtube.com/@anautumnbreeze004)
